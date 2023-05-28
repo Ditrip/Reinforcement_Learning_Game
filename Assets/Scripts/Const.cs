@@ -14,4 +14,11 @@ public class Const
         Right = 2
     }
 
+    public enum Tags
+    {
+        AiEnv,
+        Target,
+        Agent
+    }
+
 }

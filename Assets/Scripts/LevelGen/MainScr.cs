@@ -9,26 +9,28 @@ public class MainScr : MonoBehaviour
     
     public GameObject platformPrefab;
     public GameObject targetPrefab;
+    public GameObject agentPrefab;
+    public GameObject rootPlatform;
     private List<GameObject> _platformList;
-    private MyPlayerPrefs.PlayerStats _playerStats;
+    // private MyPlayerPrefs.PlayerStats _playerStats;
     private GameObject _target;
 
     public void Start()
     {
-        _playerStats = MyPlayerPrefs.GetInstance();
-        _platformList = new List<GameObject>();
         SetLevel();
         // GameObject rootPlatform = GameObject.Find("RootPlatform");
         // _platformList.Add(rootPlatform);
-        
     }
-
     public void SetLevel()
     {
-        
+        if (_platformList is null)
+        {
+            _platformList = new List<GameObject>();
+        }
+        MyPlayerPrefs.PlayerStats _playerStats = MyPlayerPrefs.GetInstance();
         uint level = _playerStats.GetLevel();
         Const.Direction prevDir = Const.Direction.Up;
-        GameObject parentPlatform = GameObject.Find("RootPlatform");
+        GameObject parentPlatform = rootPlatform;
         ResetLevel();
 
         for (int i = 0; i < level; i++)
@@ -52,9 +54,7 @@ public class MainScr : MonoBehaviour
                 }
                 
             }
-            
-            Debug.Log("Directions: " + newDir);
-            
+
             switch (newDir)
             {
                 case Const.Direction.Up:
@@ -75,29 +75,48 @@ public class MainScr : MonoBehaviour
         }
         
         SetTarget(parentPlatform);
-        
+        SetAgent();
     }
-
     private void ResetLevel()
     {
+        
         foreach (GameObject platform in _platformList)
         {
-            GameObject.Destroy(platform);
+            Destroy(platform);
         }
+        _platformList.Clear();
         
         if(_target is not null)
             Destroy(_target);
     }
-
     private void SetTarget(GameObject platform)
     {
         Vector3 targetPos = platform.transform.position;
-
+        
         targetPos.x += Random.Range(-(Const.PlatformSize/2)+Const.TargetSize/2,(Const.PlatformSize/2)-Const.TargetSize/2 );
         targetPos.z += Random.Range(-(Const.PlatformSize/2)+Const.TargetSize/2,(Const.PlatformSize/2)-Const.TargetSize/2 );
         targetPos.y += Const.TargetSize / 2;
 
         _target = Instantiate(targetPrefab,gameObject.transform);
         _target.transform.position = targetPos;
+    }
+    
+    private void SetAgent()
+    {
+        ManualControl _control = gameObject.GetComponentInChildren<ManualControl>();
+        Vector3 pos = (agentPrefab.transform.position = rootPlatform.transform.position);
+        pos.y += 0.5f;
+        Rigidbody sphereBody = agentPrefab.GetComponent<Rigidbody>();
+        sphereBody.velocity = Vector3.zero;
+        sphereBody.angularVelocity = Vector3.zero;
+    }
+
+    public static void SetNextLevel()
+    {
+        foreach (GameObject aiEnv in GameObject.FindGameObjectsWithTag(Const.Tags.AiEnv.ToString()))
+        {
+            MainScr levelGen = aiEnv.GetComponent<MainScr>();
+            levelGen.SetLevel();
+        }
     }
 }
