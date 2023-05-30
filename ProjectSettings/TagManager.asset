@@ -7,6 +7,9 @@ TagManager:
   - AiEnv
   - Target
   - Agent
+  - Platform
+  - Wall
+  - FallingObj
   layers:
   - Default
   - TransparentFX
@@ -14,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Collidable
+  - NotCollidable
   - 
   - 
   - 
