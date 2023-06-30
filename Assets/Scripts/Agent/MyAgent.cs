@@ -4,27 +4,34 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MyAgent : Agent
 {
     private Rigidbody _rigidBody;
     public float forceMultiplier;
-    private MainScr _mainScr;
+    private LevelScr _levelScr;
+    private bool _isAgentReachGoal;
+    private bool _isAgentFell;
+    private bool _isAgentTouchingWall;
+    
     
     // Start is called before the first frame update
     void Start()
     {
-        _mainScr = gameObject.GetComponentInParent<MainScr>();
+        _levelScr = gameObject.GetComponentInParent<LevelScr>();
         _rigidBody = gameObject.GetComponent<Rigidbody>();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(gameObject.transform.localPosition);
-        sensor.AddObservation(_mainScr.target.transform.localPosition);
+        sensor.AddObservation(_levelScr.target.transform.localPosition);
         sensor.AddObservation(_rigidBody.velocity.x);
         sensor.AddObservation(_rigidBody.velocity.z);
+        sensor.AddObservation(_levelScr.walls ? _isAgentTouchingWall : _isAgentFell);
+        sensor.AddObservation(_isAgentReachGoal);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -34,22 +41,28 @@ public class MyAgent : Agent
         
         MoveAgent(moveAction,rotateAction);
 
-        if (_rigidBody.position.y < _mainScr.rootPlatform.transform.position.y)
+        if (_rigidBody.position.y < _levelScr.rootPlatform.transform.position.y)
         {
-            SetReward(-0.1f);
+            if (!_isAgentFell){
+                _isAgentFell = true;
+                return;
+            }
+            SetReward(-1);
             EndEpisode();
+            return;
+        }
+
+        if (_isAgentReachGoal)
+        {
+            Debug.Log("Agent reach goal (OnActionReceived)");
+            SetReward(10);
+            _levelScr.SetNextLevel();
+            EndEpisode();
+            _isAgentReachGoal = false;
+            return;
         }
         
-        SetReward(-0.0005f);
-
-        // float distanceToTarget =
-        //     Vector3.Distance(gameObject.transform.localPosition, _mainScr.target.transform.localPosition);
-        // if (distanceToTarget < 1.4)
-        // {
-        //     SetReward(1);
-        //     _mainScr.SetNextLevel();
-        //     EndEpisode();
-        // }
+        AddReward(-0.00001f);
     }
 
     private void MoveAgent(int moveAct, int rotateAct)
@@ -62,9 +75,9 @@ public class MyAgent : Agent
             case 1:
                 dirToGo = transform.forward * 1f;
                 break;
-            case 2:
-                dirToGo = transform.forward * -1f;
-                break;
+            // case 2:
+            //     dirToGo = transform.forward * -1f;
+            //     break;
         }
 
         switch (rotateAct)
@@ -84,7 +97,8 @@ public class MyAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        _mainScr.SetLevel();
+        _levelScr.SetLevel();
+        _isAgentFell = false;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -109,11 +123,44 @@ public class MyAgent : Agent
 
     public void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString()))
+        {
+            try
+            {
+                if (collision.gameObject.GetComponent<Platform>().RewardAgent(gameObject))
+                {
+                    AddReward(0.1f);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Debug.LogWarning("Platform script is missing");
+                throw;
+            }
+            return;
+        }
+
+        if (collision.gameObject.tag.Equals(Const.Tags.Wall.ToString()))
+        {
+            _isAgentTouchingWall = true;
+            return;
+        }
+        
         if (collision.gameObject.tag.Equals(Const.Tags.Target.ToString()))
         {
-            SetReward(1);
-            _mainScr.SetNextLevel();
-            EndEpisode();
+            _isAgentReachGoal = true;
+        }
+    }
+
+    public void OnCollisionExit(Collision other)
+    {
+        if (_isAgentTouchingWall)
+        {
+            if (other.gameObject.tag.Equals(Const.Tags.Wall.ToString()))
+            {
+                _isAgentTouchingWall = false;
+            }
         }
     }
 }

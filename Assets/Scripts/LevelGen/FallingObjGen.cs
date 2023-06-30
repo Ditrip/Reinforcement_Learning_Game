@@ -21,19 +21,21 @@ public class FallingObjGen : MonoBehaviour
         while (true)
         {
             int id = Random.Range(1, 3);
+            Vector3 spawnPos = gameObject.transform.position;
+            Vector3 randomPos = new Vector3(Random.Range(-5.0f, 5.0f), 13, Random.Range(-5.0f, 5.0f));
             Debug.Log("Falling Obj (id): " + id);
             if (id == 1)
             {
                 
                 Instantiate(fallingCube.gameObject,
-                    new Vector3(Random.Range(-5.0f, 5.0f), 13, Random.Range(-5.0f, 5.0f)),
+                    spawnPos + randomPos,
                     Quaternion.identity, 
                     gameObject.transform);
             }
             else
             {
                 Instantiate(fallingSphere.gameObject,
-                    new Vector3(Random.Range(-5.0f, 5.0f), 13, Random.Range(-5.0f, 5.0f)),
+                    spawnPos + randomPos,
                     Quaternion.identity, 
                     gameObject.transform);
             }

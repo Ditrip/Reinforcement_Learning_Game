@@ -10,6 +10,8 @@ TagManager:
   - Platform
   - Wall
   - FallingObj
+  - RootPlatform
+  - NextPlatform
   layers:
   - Default
   - TransparentFX

@@ -83,11 +83,11 @@ public class MyPlayerPrefs
             var json = File.ReadAllText(SaveDirectory +"/"+ JsonFileName + FileExtension);
             obj = JsonUtility.FromJson<PlayerStats>(json);
             
-            // Debug.Log(Green($"Loaded {JsonFileName}"));
+            Debug.Log(Green($"Loaded {JsonFileName}"));
         }
         catch (Exception e)
         {
-            // Debug.Log(Green($"Not Loaded " + e.Message));
+            Debug.Log(Green($"Not Loaded " + e.Message));
         }
         
             

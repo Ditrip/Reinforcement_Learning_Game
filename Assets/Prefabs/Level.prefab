@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 185357206707769921}
   - component: {fileID: 7853944760899721638}
   - component: {fileID: 8520755053053062183}
+  - component: {fileID: 3261065684107123634}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Agent
@@ -130,7 +131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 772718164203965589}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: -0.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -166,16 +167,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 10
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 0300000003000000
-    VectorActionSize: 0300000003000000
+      BranchSizes: 0200000003000000
+    VectorActionSize: 0200000003000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: fc1f0af0d3cf26a4c9c57f1f595fdd30, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Agent
@@ -294,6 +295,7 @@ MonoBehaviour:
   - Platform
   - Target
   - Wall
+  - NextPlatform
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.2
@@ -304,9 +306,39 @@ MonoBehaviour:
   m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0.25
+  m_StartVerticalOffset: -0
   m_EndVerticalOffset: -3
 --- !u!114 &8520755053053062183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772718164203965589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: RayPerceptionSensorMiddle
+  m_DetectableTags:
+  - Platform
+  - Target
+  - Wall
+  - NextPlatform
+  m_RaysPerDirection: 4
+  m_MaxRayDegrees: 90
+  m_SphereCastRadius: 0.3
+  m_RayLength: 20
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  m_ObservationStacks: 1
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0.5
+  m_EndVerticalOffset: -1.5
+--- !u!114 &3261065684107123634
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,18 +355,19 @@ MonoBehaviour:
   - Platform
   - Target
   - Wall
-  m_RaysPerDirection: 3
+  - NextPlatform
+  m_RaysPerDirection: 6
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.3
-  m_RayLength: 20
+  m_RayLength: 40
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291
   m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0.5
-  m_EndVerticalOffset: -1
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 0
 --- !u!1 &941057545970418304
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,7 +765,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8668661437400892371}
-  - component: {fileID: 8158516298852713746}
+  - component: {fileID: 3957663520313215734}
   m_Layer: 0
   m_Name: Level
   m_TagString: AiEnv
@@ -758,7 +791,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8158516298852713746
+--- !u!114 &3957663520313215734
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -775,7 +808,7 @@ MonoBehaviour:
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}
   numOfRepeatedLvl: 5
-  walls: 0
+  walls: 1
 --- !u!1 &8224913837741513709
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,10 +821,11 @@ GameObject:
   - component: {fileID: 5201133921409450277}
   - component: {fileID: 262637387769117404}
   - component: {fileID: 3727885271967573468}
+  - component: {fileID: 8698060202441710251}
   - component: {fileID: 8852486854245503788}
   m_Layer: 0
   m_Name: RootPlatform
-  m_TagString: Platform
+  m_TagString: RootPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -879,6 +913,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8698060202441710251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8224913837741513709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6557d58e58f26e044a30afc18b7c5083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8852486854245503788
 MonoBehaviour:
   m_ObjectHideFlags: 0

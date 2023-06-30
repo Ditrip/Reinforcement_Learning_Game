@@ -206,10 +206,12 @@ GameObject:
   - component: {fileID: 4464014984397477500}
   - component: {fileID: 1380953575263360372}
   - component: {fileID: 1461005640877745300}
+  - component: {fileID: 9191909287814542516}
   - component: {fileID: 5617335205031290672}
+  - component: {fileID: 1639513140373100632}
   m_Layer: 7
   m_Name: FadePlatform
-  m_TagString: Platform
+  m_TagString: NextPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -297,6 +299,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4390864954431106648}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &9191909287814542516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4390864954431106648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6557d58e58f26e044a30afc18b7c5083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5617335205031290672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +327,18 @@ MonoBehaviour:
   wallDown: {fileID: 5403219577451545662}
   wallLeft: {fileID: 5507700145568874532}
   wallRight: {fileID: 4226194259157540022}
+--- !u!114 &1639513140373100632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4390864954431106648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d879474bcb0a97488e65869ef059c6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5403219577451545662
 GameObject:
   m_ObjectHideFlags: 0

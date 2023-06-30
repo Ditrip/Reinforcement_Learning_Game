@@ -11,7 +11,6 @@ public class PlatformWalls : MonoBehaviour
     public GameObject wallRight;
 
     private bool _isActive;
-    // Start is called before the first frame update
     private void Awake()
     {
         _isActive = true;

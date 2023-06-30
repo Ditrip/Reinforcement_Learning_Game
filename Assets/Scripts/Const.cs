@@ -19,7 +19,12 @@ public class Const
     {
         AiEnv,
         Target,
-        Agent
+        Agent,
+        Platform,
+        Wall,
+        FallingObj,
+        RootPlatform,
+        NextPlatform
     }
 
 }
