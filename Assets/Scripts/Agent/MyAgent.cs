@@ -26,8 +26,8 @@ public class MyAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(gameObject.transform.localPosition);
-        sensor.AddObservation(_levelScr.target.transform.localPosition);
+        // sensor.AddObservation(gameObject.transform.localPosition);
+        // sensor.AddObservation(_levelScr.target.transform.localPosition);
         sensor.AddObservation(_rigidBody.velocity.x);
         sensor.AddObservation(_rigidBody.velocity.z);
         sensor.AddObservation(_levelScr.walls ? _isAgentTouchingWall : _isAgentFell);
@@ -74,10 +74,12 @@ public class MyAgent : Agent
         {
             case 1:
                 dirToGo = transform.forward * 1f;
+                _rigidBody.AddForce(dirToGo * forceMultiplier,
+                    ForceMode.VelocityChange);
                 break;
-            // case 2:
-            //     dirToGo = transform.forward * -1f;
-            //     break;
+            case 2:
+                _rigidBody.velocity = Vector3.zero;
+                break;
         }
 
         switch (rotateAct)
@@ -91,8 +93,6 @@ public class MyAgent : Agent
         }
         
         transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
-        _rigidBody.AddForce(dirToGo * forceMultiplier,
-            ForceMode.VelocityChange);
     }
 
     public override void OnEpisodeBegin()
