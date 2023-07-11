@@ -206,11 +206,11 @@ GameObject:
   - component: {fileID: 4464014984397477500}
   - component: {fileID: 1380953575263360372}
   - component: {fileID: 1461005640877745300}
+  - component: {fileID: 7836424372244265809}
   - component: {fileID: 5617335205031290672}
-  - component: {fileID: 8348309366332646786}
-  - component: {fileID: 3266962057817184262}
+  - component: {fileID: -9176752718076540769}
   m_Layer: 7
-  m_Name: FallingObjPlatform
+  m_Name: JumpPlatform
   m_TagString: NextPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,6 +299,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4390864954431106648}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &7836424372244265809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4390864954431106648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6557d58e58f26e044a30afc18b7c5083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5617335205031290672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +327,7 @@ MonoBehaviour:
   wallDown: {fileID: 5403219577451545662}
   wallLeft: {fileID: 5507700145568874532}
   wallRight: {fileID: 4226194259157540022}
---- !u!114 &8348309366332646786
+--- !u!114 &-9176752718076540769
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,24 +336,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4390864954431106648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6557d58e58f26e044a30afc18b7c5083, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a148ea0254f47f4fa9e0b90ffa8ded0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3266962057817184262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4390864954431106648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2c6b53b4b3e45f4a94b9bc832313e5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fallingCube: {fileID: 5211644180069197394, guid: bab6f53882b9a0d4cad583d7c17a7a7d, type: 3}
-  fallingSphere: {fileID: 7336672703171570841, guid: c910f47f904447047a525a5ba6a1b0df, type: 3}
-  frequency: 1
 --- !u!1 &5403219577451545662
 GameObject:
   m_ObjectHideFlags: 0

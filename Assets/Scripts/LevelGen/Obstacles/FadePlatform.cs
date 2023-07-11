@@ -6,11 +6,13 @@ using UnityEngine;
 public class FadePlatform : MonoBehaviour
 {
     private MeshCollider _meshCollider;
+    private MeshRenderer _meshRenderer;
     
     // Start is called before the first frame update
     void Start()
     {
         _meshCollider = gameObject.GetComponent<MeshCollider>();
+        _meshRenderer = gameObject.GetComponent<MeshRenderer>();
     }
     public void OnCollisionEnter(Collision collision)
     {
@@ -24,6 +26,7 @@ public class FadePlatform : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         _meshCollider.enabled = false;
+        _meshRenderer.enabled = false;
         StartCoroutine(FadeInPlatform());
     }
 
@@ -31,5 +34,6 @@ public class FadePlatform : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         _meshCollider.enabled = true;
+        _meshRenderer.enabled = true;
     }
 }

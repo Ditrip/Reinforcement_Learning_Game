@@ -11,16 +11,26 @@ public class MyAgent : Agent
 {
     private Rigidbody _rigidBody;
     public float forceMultiplier;
-    private LevelScr _levelScr;
+    public float jumpVelocity;
+    [HideInInspector]
+    public LevelScr levelScr;
     private bool _isAgentReachGoal;
     private bool _isAgentFell;
     private bool _isAgentTouchingWall;
-    
-    
+    private bool _isAgentJumping;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        _levelScr = gameObject.GetComponentInParent<LevelScr>();
+        if (transform.parent.TryGetComponent<LevelScr>(out LevelScr levelScript))
+        {
+            levelScr = gameObject.GetComponentInParent<LevelScr>();
+        }else if (transform.parent.TryGetComponent<TrainLevelScr>(out TrainLevelScr trainLevelScr))
+        {
+            levelScr = trainLevelScr;
+        }
+        
         _rigidBody = gameObject.GetComponent<Rigidbody>();
     }
 
@@ -30,7 +40,7 @@ public class MyAgent : Agent
         // sensor.AddObservation(_levelScr.target.transform.localPosition);
         sensor.AddObservation(_rigidBody.velocity.x);
         sensor.AddObservation(_rigidBody.velocity.z);
-        sensor.AddObservation(_levelScr.walls ? _isAgentTouchingWall : _isAgentFell);
+        sensor.AddObservation(levelScr.walls ? _isAgentTouchingWall : _isAgentFell);
         sensor.AddObservation(_isAgentReachGoal);
     }
 
@@ -38,10 +48,11 @@ public class MyAgent : Agent
     {
         int moveAction = actions.DiscreteActions[0];
         int rotateAction = actions.DiscreteActions[1];
+        int jumpAction = actions.DiscreteActions[2];
         
-        MoveAgent(moveAction,rotateAction);
+        MoveAgent(moveAction,rotateAction,jumpAction);
 
-        if (_rigidBody.position.y < _levelScr.rootPlatform.transform.position.y)
+        if (_rigidBody.position.y < levelScr.rootPlatform.transform.position.y)
         {
             if (!_isAgentFell){
                 _isAgentFell = true;
@@ -56,7 +67,7 @@ public class MyAgent : Agent
         {
             Debug.Log("Agent reach goal (OnActionReceived)");
             SetReward(10);
-            _levelScr.SetNextLevel();
+            levelScr.SetNextLevel();
             EndEpisode();
             _isAgentReachGoal = false;
             return;
@@ -65,7 +76,7 @@ public class MyAgent : Agent
         AddReward(-0.00001f);
     }
 
-    private void MoveAgent(int moveAct, int rotateAct)
+    private void MoveAgent(int moveAct, int rotateAct, int jumpAction)
     {
         Vector3 dirToGo = Vector3.zero;
         Vector3 rotateDir = Vector3.zero;
@@ -78,7 +89,7 @@ public class MyAgent : Agent
                     ForceMode.VelocityChange);
                 break;
             case 2:
-                _rigidBody.velocity = Vector3.zero;
+                _rigidBody.velocity = new Vector3(0,_rigidBody.velocity.y,0);
                 break;
         }
 
@@ -91,14 +102,27 @@ public class MyAgent : Agent
                 rotateDir = transform.up * -1f;
                 break;
         }
+
+        switch (jumpAction)
+        {
+            case 1:
+                Debug.Log("Jump action received(_isAgentJumping: " + _isAgentJumping + ")");
+                if(!_isAgentJumping){
+                    _rigidBody.AddForce(0,jumpVelocity,0,ForceMode.VelocityChange);
+                    _isAgentJumping = true;
+                    StartCoroutine(JumpingCoroutine());
+                }
+                break;
+        }
         
         transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
     }
 
     public override void OnEpisodeBegin()
     {
-        _levelScr.SetLevel();
+        levelScr.SetLevel();
         _isAgentFell = false;
+        _isAgentJumping = false;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -117,6 +141,10 @@ public class MyAgent : Agent
         } else if (Input.GetKey(KeyCode.A))
         {
             discreteActions[1] = 2;
+        } else if (Input.GetKey(KeyCode.Space))
+        {
+            Debug.Log("Jump action");
+            discreteActions[2] = 1;
         }
 
     }
@@ -162,5 +190,11 @@ public class MyAgent : Agent
                 _isAgentTouchingWall = false;
             }
         }
+    }
+
+    private IEnumerator JumpingCoroutine()
+    {
+        yield return new WaitForSeconds(1.5f);
+        _isAgentJumping = false;
     }
 }

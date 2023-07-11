@@ -8,7 +8,7 @@ public class ButtonScr : MonoBehaviour
     {
         MyPlayerPrefs.PlayerStats instance = MyPlayerPrefs.GetInstance();
         instance.SetNextLevel();
-        // SetLevelAiEnv();
+        SetLevelAiEnv();
     }
 
     public void PrevLevelButton()
@@ -17,7 +17,7 @@ public class ButtonScr : MonoBehaviour
         if (instance.GetLevel() > 0)
         {
             instance.SetPrevLevel();
-            // SetLevelAiEnv();
+            SetLevelAiEnv();
         }
     }
 
@@ -30,9 +30,15 @@ public class ButtonScr : MonoBehaviour
 
     private void SetLevelAiEnv()
     {
-        foreach (GameObject AiEnv in GameObject.FindGameObjectsWithTag("AiEnv"))
+        foreach (GameObject aiEnv in GameObject.FindGameObjectsWithTag(Const.Tags.AiEnv.ToString()))
         {
-            LevelScr levelGenerator = AiEnv.GetComponent<LevelScr>();
+            LevelScr levelGenerator = aiEnv.GetComponent<LevelScr>();
+            levelGenerator.SetLevel();
+        }
+
+        foreach (GameObject trainAiEnv in GameObject.FindGameObjectsWithTag(Const.Tags.TrainAiEnv.ToString()))
+        {
+            TrainLevelScr levelGenerator = trainAiEnv.GetComponent<TrainLevelScr>();
             levelGenerator.SetLevel();
         }
     }

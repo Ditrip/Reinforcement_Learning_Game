@@ -24,7 +24,22 @@ public class Const
         Wall,
         FallingObj,
         RootPlatform,
-        NextPlatform
+        NextPlatform,
+        JumpWall,
+        TrainAiEnv
     }
 
+    public enum Platforms
+    {
+        FallingObj,
+        FadePlatform,
+        JumpWall,
+        Default
+    }
+
+    public enum WallHeight
+    {
+        Normal = 1,
+        High = 3
+    }
 }

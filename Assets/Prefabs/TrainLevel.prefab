@@ -201,7 +201,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   forceMultiplier: 1
-  jumpVelocity: 0
+  jumpVelocity: 6
   levelScr: {fileID: 0}
 --- !u!114 &6379074877944367775
 MonoBehaviour:
@@ -767,10 +767,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8668661437400892371}
-  - component: {fileID: 3957663520313215734}
+  - component: {fileID: -1736600284288583538}
   m_Layer: 0
-  m_Name: Level
-  m_TagString: AiEnv
+  m_Name: TrainLevel
+  m_TagString: TrainAiEnv
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -793,7 +793,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3957663520313215734
+--- !u!114 &-1736600284288583538
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -802,7 +802,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8115728725140929690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32463308a2baf384dad364ff4a8d5064, type: 3}
+  m_Script: {fileID: 11500000, guid: b9b65d508bfec6e49bda4f7c3c5110f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   platformPrefab: {fileID: 4390864954431106648, guid: fc4eef2169741e2459a4868c43893929, type: 3}
@@ -813,8 +813,10 @@ MonoBehaviour:
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}
   numOfRepeatedLvl: 5
-  walls: 1
+  walls: 0
   spawnChanceUniquePlat: 30
+  platforms: 2
+  isOdd: 0
 --- !u!1 &8224913837741513709
 GameObject:
   m_ObjectHideFlags: 0

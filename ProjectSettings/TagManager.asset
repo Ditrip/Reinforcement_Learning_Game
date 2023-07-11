@@ -12,6 +12,8 @@ TagManager:
   - FallingObj
   - RootPlatform
   - NextPlatform
+  - JumpWall
+  - TrainAiEnv
   layers:
   - Default
   - TransparentFX

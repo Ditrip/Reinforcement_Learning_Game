@@ -23,7 +23,7 @@ public class FallingObjGen : MonoBehaviour
             int id = Random.Range(1, 3);
             Vector3 spawnPos = gameObject.transform.position;
             Vector3 randomPos = new Vector3(Random.Range(-5.0f, 5.0f), 13, Random.Range(-5.0f, 5.0f));
-            Debug.Log("Falling Obj (id): " + id);
+            // Debug.Log("Falling Obj (id): " + id);
             if (id == 1)
             {
                 
