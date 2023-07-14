@@ -18,6 +18,7 @@ public class MyAgent : Agent
     private bool _isAgentFell;
     private bool _isAgentTouchingWall;
     private bool _isAgentJumping;
+    private bool _checkCoroutineJump;
 
 
     // Start is called before the first frame update
@@ -42,6 +43,7 @@ public class MyAgent : Agent
         sensor.AddObservation(_rigidBody.velocity.z);
         sensor.AddObservation(levelScr.walls ? _isAgentTouchingWall : _isAgentFell);
         sensor.AddObservation(_isAgentReachGoal);
+        sensor.AddObservation(_isAgentJumping);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -123,6 +125,7 @@ public class MyAgent : Agent
         levelScr.SetLevel();
         _isAgentFell = false;
         _isAgentJumping = false;
+        _checkCoroutineJump = true;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -192,9 +195,22 @@ public class MyAgent : Agent
         }
     }
 
+    public void OnCollisionStay(Collision collisionInfo)
+    {
+        if (_checkCoroutineJump)
+        {
+            if (collisionInfo.gameObject.tag.Equals(Const.Tags.Platform.ToString())
+                || collisionInfo.gameObject.tag.Equals(Const.Tags.RootPlatform.ToString()))
+            {
+                _isAgentJumping = false;
+            }
+        }
+    }
+
     private IEnumerator JumpingCoroutine()
     {
-        yield return new WaitForSeconds(1.5f);
-        _isAgentJumping = false;
+        _checkCoroutineJump = false;
+        yield return new WaitForSeconds(1);
+        _checkCoroutineJump = true;
     }
 }

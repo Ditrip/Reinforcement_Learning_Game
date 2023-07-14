@@ -341,7 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fallingCube: {fileID: 5211644180069197394, guid: bab6f53882b9a0d4cad583d7c17a7a7d, type: 3}
   fallingSphere: {fileID: 7336672703171570841, guid: c910f47f904447047a525a5ba6a1b0df, type: 3}
-  frequency: 1
+  frequency: 1.5
 --- !u!1 &5403219577451545662
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class LevelScr : MonoBehaviour
     public GameObject fallingObjPrefab;
     public GameObject fadePlatformPrefab;
     public GameObject jumpWallPrefab;
+    public GameObject pillarsPrefab;
     public GameObject target;
     public GameObject agent;
     public GameObject rootPlatform;
@@ -93,7 +94,6 @@ public class LevelScr : MonoBehaviour
             void IsJumpPlatform(Const.Direction dir)
             {
                 if (childPlatformWalls.TryGetComponent<JumpWall>(out JumpWall jumpWall)){
-                    Debug.Log("Level Scr (Is wall jump)");
                     jumpWall.SetJumpWall(dir);
                     childPlatformWalls.SetWallHeight(dir,Const.WallHeight.Normal);
                 }
@@ -195,6 +195,9 @@ public class LevelScr : MonoBehaviour
                     break;
                 case Const.Platforms.JumpWall:
                     platformObj = Instantiate(jumpWallPrefab, gameObject.transform);
+                    break;
+                case Const.Platforms.Pillars:
+                    platformObj = Instantiate(pillarsPrefab, gameObject.transform);
                     break;
                 default:
                     Debug.Log("Level Scr (Unique platform set to 'default')");

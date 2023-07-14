@@ -27,9 +27,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695694715865812590}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4, y: 0.5, z: 4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 4, y: 1, z: 4}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 8668661437400892371}
   m_RootOrder: 2
@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 7853944760899721638}
   - component: {fileID: 8520755053053062183}
   - component: {fileID: 3261065684107123634}
+  - component: {fileID: 5129308381231419420}
   m_Layer: 6
   m_Name: Agent
   m_TagString: Agent
@@ -167,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 5
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -370,6 +371,33 @@ MonoBehaviour:
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
   m_EndVerticalOffset: 0
+--- !u!114 &5129308381231419420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772718164203965589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: RayPerceptionSensorHigh
+  m_DetectableTags:
+  - FallingObj
+  m_RaysPerDirection: 4
+  m_MaxRayDegrees: 40
+  m_SphereCastRadius: 0.5
+  m_RayLength: 10
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  m_ObservationStacks: 1
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 6.5
 --- !u!1 &941057545970418304
 GameObject:
   m_ObjectHideFlags: 0
@@ -809,13 +837,14 @@ MonoBehaviour:
   fallingObjPrefab: {fileID: 4390864954431106648, guid: cca95907beecb644cb4c5edef15eb7bd, type: 3}
   fadePlatformPrefab: {fileID: 4390864954431106648, guid: 06ccbeedca861ed42bf074c6133d06fa, type: 3}
   jumpWallPrefab: {fileID: 4390864954431106648, guid: 824834514a1311d4a88c054555b7159b, type: 3}
+  pillarsPrefab: {fileID: 4390864954431106648, guid: e430fd9793ba54e439d909304bbb7121, type: 3}
   target: {fileID: 695694715865812590}
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}
   numOfRepeatedLvl: 5
-  walls: 0
+  walls: 1
   spawnChanceUniquePlat: 30
-  platforms: 2
+  platforms: 0
   isOdd: 0
 --- !u!1 &8224913837741513709
 GameObject:

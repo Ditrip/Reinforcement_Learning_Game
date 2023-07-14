@@ -42,11 +42,5 @@ public class FallingObjGen : MonoBehaviour
             yield return new WaitForSeconds(frequency);
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
-    
+
 }

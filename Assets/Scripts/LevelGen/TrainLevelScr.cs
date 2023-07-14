@@ -34,6 +34,9 @@ public class TrainLevelScr : LevelScr
             case Const.Platforms.JumpWall:
                 platform = Instantiate(jumpWallPrefab, gameObject.transform);
                 break;
+            case Const.Platforms.Pillars:
+                platform = Instantiate(pillarsPrefab, gameObject.transform);
+                break;
             default:
                 Debug.Log("TrainLevelScr(Platform set to 'default')");
                 platform = Instantiate(platformPrefab, gameObject.transform);

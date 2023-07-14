@@ -208,9 +208,9 @@ GameObject:
   - component: {fileID: 1461005640877745300}
   - component: {fileID: 7836424372244265809}
   - component: {fileID: 5617335205031290672}
-  - component: {fileID: -9176752718076540769}
+  - component: {fileID: 7632626682432296473}
   m_Layer: 7
-  m_Name: JumpPlatform
+  m_Name: PillarPlatform
   m_TagString: NextPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -327,7 +327,7 @@ MonoBehaviour:
   wallDown: {fileID: 5403219577451545662}
   wallLeft: {fileID: 5507700145568874532}
   wallRight: {fileID: 4226194259157540022}
---- !u!114 &-9176752718076540769
+--- !u!114 &7632626682432296473
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -336,11 +336,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4390864954431106648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a148ea0254f47f4fa9e0b90ffa8ded0, type: 3}
+  m_Script: {fileID: 11500000, guid: ce8bf34d1fd465a4fa1aa34fa92f4cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpWallPrefab: {fileID: 8481344093576296338, guid: 544cd3b4d4668dc43a840d0e528b9285, type: 3}
-  gap: 3
+  pillarPrefab: {fileID: 3201561513265924640, guid: 7a0e18ff01d853d4895d1b6a86da18d1, type: 3}
+  numOfPillars: 5
 --- !u!1 &5403219577451545662
 GameObject:
   m_ObjectHideFlags: 0

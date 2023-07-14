@@ -88,11 +88,11 @@ public class PlatformWalls : MonoBehaviour
         switch (wallHeight)
         {
             case Const.WallHeight.High:
-                wallPos.y = 1.5f;
+                wallPos.y = (float)wallHeight/2;
                 wallScale.y = (float) Const.WallHeight.High;
                 break;
             case Const.WallHeight.Normal:
-                wallPos.y = 0.5f;
+                wallPos.y = (float)wallHeight/2;
                 wallScale.y = (float)Const.WallHeight.Normal;
                 break;
         }

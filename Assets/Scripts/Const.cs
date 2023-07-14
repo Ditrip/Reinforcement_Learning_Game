@@ -5,7 +5,9 @@ using UnityEngine;
 public class Const
 {
     public const float PlatformSize = 10;
+    public const float AgentSize = 1;
     public const float TargetSize = 1;
+    public const float PillarHeight = 3;
 
     public enum Direction
     {
@@ -34,6 +36,7 @@ public class Const
         FallingObj,
         FadePlatform,
         JumpWall,
+        Pillars,
         Default
     }
 
