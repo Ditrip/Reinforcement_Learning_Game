@@ -32,7 +32,10 @@ public class FallingObj : MonoBehaviour
     {
         if (collision.gameObject.tag.Equals(Const.Tags.Agent.ToString()))
         {
-            collision.gameObject.GetComponent<MyAgent>().EndEpisode();
+            if (collision.gameObject.TryGetComponent<MyAgent>(out MyAgent myAgent))
+                myAgent.killAgent = true;
+            else
+                Debug.LogWarning("Tagged object (Agent) does not have required script (MyAgent)");
         }
     }
 }

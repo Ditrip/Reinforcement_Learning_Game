@@ -15,12 +15,13 @@ public class LevelScr : MonoBehaviour
     public GameObject target;
     public GameObject agent;
     public GameObject rootPlatform;
-    public int numOfRepeatedLvl = 1;
+    public int numOfRepeatedLvl = 5;
     public bool walls = false;
     public int spawnChanceUniquePlat = 30;
     private List<GameObject> _platformList;
+    private bool _checkUniquePlatformSpawn; // Is used to prevent spawn of two unique platform in row
     
-    private int _lvlCounter;
+    private static int _lvlCounter = 0;
 
     public void Start()
     {
@@ -33,8 +34,8 @@ public class LevelScr : MonoBehaviour
     }
     public void SetLevel()
     {
-        
         _platformList ??= new List<GameObject>(); // ??= (Is Platform list null?)
+        _checkUniquePlatformSpawn = false;
         MyPlayerPrefs.PlayerStats playerStats = MyPlayerPrefs.GetInstance();
         uint level = playerStats.GetLevel();
         Const.Direction prevDir = Const.Direction.Up;
@@ -159,40 +160,43 @@ public class LevelScr : MonoBehaviour
 
     public void SetNextLevel()
     {
-        if (_lvlCounter == MyPlayerPrefs.GetInstance().level)
+        if (_lvlCounter >= MyPlayerPrefs.GetInstance().level && _lvlCounter >= numOfRepeatedLvl)
         {
             MyPlayerPrefs.GetInstance().SetNextLevel();
             _lvlCounter = 0;
         }
         else{
             _lvlCounter++;
-            Debug.Log("Repeated level: "+ _lvlCounter + " " + numOfRepeatedLvl);
+            Debug.Log("Repeated level: "+ _lvlCounter + " " + 
+                      (MyPlayerPrefs.GetInstance().level > numOfRepeatedLvl ? 
+                          MyPlayerPrefs.GetInstance().level : numOfRepeatedLvl));
         }
         
         SetLevel();
     }
 
-    public GameObject GetRandomPlatform()
+    private GameObject GetRandomPlatform()
     {
         int chanceSpawn = Random.Range(0, 101);
         // Debug.Log("Level scr(Random Value: " + chanceSpawn + ")");
 
-        if (chanceSpawn <= spawnChanceUniquePlat)
+        if (chanceSpawn <= spawnChanceUniquePlat && !_checkUniquePlatformSpawn)
         {
             Array platforms = Enum.GetValues(typeof(Const.Platforms));
-            Const.Platforms platform = (Const.Platforms)platforms.GetValue(Random.Range(0, platforms.Length-1));
-            Debug.Log("Unique platform has spawned (Platform: " + platform.ToString() + ")");
+            // Range set from 1 because 0 equals to default platform
+            Const.Platforms platform = (Const.Platforms)platforms.GetValue(Random.Range(1, platforms.Length));
+            // Debug.Log("Unique platform has spawned (Platform: " + platform.ToString() + ")");
 
             GameObject platformObj;
 
             switch (platform)
             {
-                case Const.Platforms.FallingObj:
-                    platformObj = Instantiate(fallingObjPrefab, gameObject.transform);
-                    break;
-                case Const.Platforms.FadePlatform:
-                    platformObj = Instantiate(fadePlatformPrefab, gameObject.transform);
-                    break;
+                // case Const.Platforms.FallingObj:
+                //     platformObj = Instantiate(fallingObjPrefab, gameObject.transform);
+                //     break;
+                // case Const.Platforms.FadePlatform:
+                //     platformObj = Instantiate(fadePlatformPrefab, gameObject.transform);
+                //     break;
                 case Const.Platforms.JumpWall:
                     platformObj = Instantiate(jumpWallPrefab, gameObject.transform);
                     break;
@@ -205,10 +209,12 @@ public class LevelScr : MonoBehaviour
                     break;
             }
 
+            _checkUniquePlatformSpawn = true;
             return platformObj;
         }
 
+        _checkUniquePlatformSpawn = false;
         return Instantiate(platformPrefab, gameObject.transform);
     }
-    
+
 }

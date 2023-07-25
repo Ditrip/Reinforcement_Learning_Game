@@ -10,15 +10,19 @@ using UnityEngine;
 public class MyAgent : Agent
 {
     private Rigidbody _rigidBody;
-    public float forceMultiplier;
-    public float jumpVelocity;
+    public float forceMultiplier = 1;
+    public float jumpVelocity = 6;
     [HideInInspector]
     public LevelScr levelScr;
+    [HideInInspector] 
+    public bool killAgent;
     private bool _isAgentReachGoal;
     private bool _isAgentFell;
     private bool _isAgentTouchingWall;
     private bool _isAgentJumping;
     private bool _checkCoroutineJump;
+    private bool _isAgentFailed;
+    // private int _platformID;
 
 
     // Start is called before the first frame update
@@ -37,13 +41,23 @@ public class MyAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // sensor.AddObservation(gameObject.transform.localPosition);
-        // sensor.AddObservation(_levelScr.target.transform.localPosition);
+        // Vector3 agentPos = gameObject.transform.localPosition;
+        // Vector3 agentRotation = gameObject.transform.rotation.eulerAngles;
+        // Vector3 targetPos = levelScr.target.transform.localPosition;
+        // sensor.AddObservation(agentPos.x);
+        // sensor.AddObservation(agentPos.z);
+        // sensor.AddObservation(targetPos.x);
+        // sensor.AddObservation(targetPos.z);
         sensor.AddObservation(_rigidBody.velocity.x);
         sensor.AddObservation(_rigidBody.velocity.z);
-        sensor.AddObservation(levelScr.walls ? _isAgentTouchingWall : _isAgentFell);
+        sensor.AddObservation(_isAgentTouchingWall);
+        sensor.AddObservation(_isAgentFell);
         sensor.AddObservation(_isAgentReachGoal);
         sensor.AddObservation(_isAgentJumping);
+        sensor.AddObservation(_isAgentFailed);
+        // sensor.AddObservation(_platformID);
+        //This observation is used to inform the agent how far he is from last platform
+        // sensor.AddObservation(Vector3.Distance(targetPos,_lastPlatform.transform.localPosition));
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -51,13 +65,25 @@ public class MyAgent : Agent
         int moveAction = actions.DiscreteActions[0];
         int rotateAction = actions.DiscreteActions[1];
         int jumpAction = actions.DiscreteActions[2];
-        
+
         MoveAgent(moveAction,rotateAction,jumpAction);
 
         if (_rigidBody.position.y < levelScr.rootPlatform.transform.position.y)
         {
             if (!_isAgentFell){
                 _isAgentFell = true;
+                return;
+            }
+            SetReward(-1);
+            EndEpisode();
+            return;
+        }
+        
+        if (killAgent)
+        {
+            if (!_isAgentFailed)
+            {
+                _isAgentFailed = true;
                 return;
             }
             SetReward(-1);
@@ -74,8 +100,8 @@ public class MyAgent : Agent
             _isAgentReachGoal = false;
             return;
         }
-        
-        AddReward(-0.00001f);
+
+        AddReward(-0.001f);
     }
 
     private void MoveAgent(int moveAct, int rotateAct, int jumpAction)
@@ -108,7 +134,7 @@ public class MyAgent : Agent
         switch (jumpAction)
         {
             case 1:
-                Debug.Log("Jump action received(_isAgentJumping: " + _isAgentJumping + ")");
+                // Debug.Log("Jump action received(_isAgentJumping: " + _isAgentJumping + ")");
                 if(!_isAgentJumping){
                     _rigidBody.AddForce(0,jumpVelocity,0,ForceMode.VelocityChange);
                     _isAgentJumping = true;
@@ -123,9 +149,13 @@ public class MyAgent : Agent
     public override void OnEpisodeBegin()
     {
         levelScr.SetLevel();
+        _isAgentTouchingWall = false;
         _isAgentFell = false;
         _isAgentJumping = false;
         _checkCoroutineJump = true;
+        _isAgentFailed = false;
+        killAgent = false;
+        // _platformID = (int)levelScr.rootPlatform.GetComponent<Platform>().GetPlatform();
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -146,7 +176,6 @@ public class MyAgent : Agent
             discreteActions[1] = 2;
         } else if (Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("Jump action");
             discreteActions[2] = 1;
         }
 
@@ -156,25 +185,23 @@ public class MyAgent : Agent
     {
         if (collision.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString()))
         {
-            try
-            {
-                if (collision.gameObject.GetComponent<Platform>().RewardAgent(gameObject))
-                {
-                    AddReward(0.1f);
-                }
+            
+            if (collision.gameObject.TryGetComponent<Platform>(out Platform platform)){
+                platform.RewardAgent(gameObject);
+                // _platformID = (int)platform.GetPlatform();
+                // Debug.Log("Current platform ID: " + _platformID);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                Debug.LogWarning("Platform script is missing");
-                throw;
-            }
+            else
+                Debug.LogWarning("Tagged object ("+Const.Tags.NextPlatform + ") does not have required script (Platform)");
+
             return;
         }
 
-        if (collision.gameObject.tag.Equals(Const.Tags.Wall.ToString()))
+        if (collision.gameObject.tag.Equals(Const.Tags.Wall.ToString()) ||
+            collision.gameObject.tag.Equals(Const.Tags.JumpWall.ToString()))
         {
             _isAgentTouchingWall = true;
+            AddReward(-0.05f);
             return;
         }
         
@@ -188,7 +215,8 @@ public class MyAgent : Agent
     {
         if (_isAgentTouchingWall)
         {
-            if (other.gameObject.tag.Equals(Const.Tags.Wall.ToString()))
+            if (other.gameObject.tag.Equals(Const.Tags.Wall.ToString())||
+                other.gameObject.tag.Equals(Const.Tags.JumpWall.ToString()))
             {
                 _isAgentTouchingWall = false;
             }

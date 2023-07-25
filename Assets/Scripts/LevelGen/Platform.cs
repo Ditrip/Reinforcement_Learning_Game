@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
+    [SerializeField]
+    private Const.Platforms platform = Const.Platforms.Default;
     private List<GameObject> _agentList;
     private void Awake()
     {
@@ -23,7 +25,13 @@ public class Platform : MonoBehaviour
         }
         Debug.Log("Agent is rewarded");
         _agentList.Add(agent);
+        agent.GetComponent<MyAgent>().AddReward(0.5f);
         gameObject.tag = Const.Tags.Platform.ToString();
         return true;
+    }
+
+    public Const.Platforms GetPlatform()
+    {
+        return platform;
     }
 }

@@ -6,7 +6,7 @@ public class Const
 {
     public const float PlatformSize = 10;
     public const float AgentSize = 1;
-    public const float TargetSize = 1;
+    public const float TargetSize = 2;
     public const float PillarHeight = 3;
 
     public enum Direction
@@ -24,20 +24,20 @@ public class Const
         Agent,
         Platform,
         Wall,
-        FallingObj,
         RootPlatform,
         NextPlatform,
         JumpWall,
-        TrainAiEnv
+        TrainAiEnv,
+        Obstacle
     }
 
     public enum Platforms
     {
-        FallingObj,
-        FadePlatform,
-        JumpWall,
-        Pillars,
-        Default
+        Default = 0,
+        JumpWall = 1,
+        Pillars = 2
+        // FallingObj = 3,
+        // FadePlatform = 4
     }
 
     public enum WallHeight

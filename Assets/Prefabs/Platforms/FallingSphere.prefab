@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -1409617736955772059}
   m_Layer: 7
   m_Name: FallingSphere
-  m_TagString: FallingObj
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

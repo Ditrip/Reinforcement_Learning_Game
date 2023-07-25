@@ -36,6 +36,8 @@ public class JumpWall : MonoBehaviour
 
         leftWall.transform.position = parentWallPos;
         rightWall.transform.position = parentWallPos;
+        leftWall.tag = Const.Tags.JumpWall.ToString();
+        rightWall.tag = Const.Tags.JumpWall.ToString();
 
         float leftWallScale = gapPos - gap/2, 
             rightWallScale = Const.PlatformSize - (gapPos + gap/2);

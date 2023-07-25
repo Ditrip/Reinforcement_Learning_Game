@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 7
+    NumStackedVectorObservations: 3
     m_ActionSpec:
       m_NumContinuousActions: 0
       BranchSizes: 030000000300000002000000
@@ -177,7 +177,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 16c5bdf491911b3439a62a68f5bfe796, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Agent
@@ -204,6 +204,7 @@ MonoBehaviour:
   forceMultiplier: 1
   jumpVelocity: 6
   levelScr: {fileID: 0}
+  killAgent: 0
 --- !u!114 &6379074877944367775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,8 +297,6 @@ MonoBehaviour:
   m_SensorName: RayPerceptionSensorLow
   m_DetectableTags:
   - Platform
-  - Target
-  - Wall
   - NextPlatform
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 90
@@ -326,12 +325,10 @@ MonoBehaviour:
   m_SensorName: RayPerceptionSensorMiddle
   m_DetectableTags:
   - Platform
-  - Target
-  - Wall
   - NextPlatform
   m_RaysPerDirection: 4
   m_MaxRayDegrees: 90
-  m_SphereCastRadius: 0.3
+  m_SphereCastRadius: 0.2
   m_RayLength: 20
   m_RayLayerMask:
     serializedVersion: 2
@@ -355,13 +352,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SensorName: RayPerceptionSensor
   m_DetectableTags:
-  - Platform
   - Target
+  - JumpWall
+  - Pillar
   - Wall
-  - NextPlatform
   m_RaysPerDirection: 6
   m_MaxRayDegrees: 90
-  m_SphereCastRadius: 0.3
+  m_SphereCastRadius: 0.2
   m_RayLength: 40
   m_RayLayerMask:
     serializedVersion: 2
@@ -384,11 +381,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SensorName: RayPerceptionSensorHigh
-  m_DetectableTags:
-  - FallingObj
-  m_RaysPerDirection: 4
-  m_MaxRayDegrees: 40
-  m_SphereCastRadius: 0.5
+  m_DetectableTags: []
+  m_RaysPerDirection: 6
+  m_MaxRayDegrees: 75
+  m_SphereCastRadius: 0.2
   m_RayLength: 10
   m_RayLayerMask:
     serializedVersion: 2
@@ -841,7 +837,7 @@ MonoBehaviour:
   target: {fileID: 695694715865812590}
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}
-  numOfRepeatedLvl: 5
+  numOfRepeatedLvl: 10
   walls: 1
   spawnChanceUniquePlat: 30
 --- !u!1 &8224913837741513709
@@ -960,6 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6557d58e58f26e044a30afc18b7c5083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  platform: 0
 --- !u!114 &8852486854245503788
 MonoBehaviour:
   m_ObjectHideFlags: 0

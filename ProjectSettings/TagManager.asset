@@ -9,11 +9,11 @@ TagManager:
   - Agent
   - Platform
   - Wall
-  - FallingObj
   - RootPlatform
   - NextPlatform
   - JumpWall
   - TrainAiEnv
+  - Pillar
   layers:
   - Default
   - TransparentFX
