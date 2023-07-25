@@ -30,16 +30,10 @@ public class ButtonScr : MonoBehaviour
 
     private void SetLevelAiEnv()
     {
-        foreach (GameObject aiEnv in GameObject.FindGameObjectsWithTag(Const.Tags.AiEnv.ToString()))
+        foreach (GameObject trainAiEnv in GameObject.FindGameObjectsWithTag(Const.Tags.Agent.ToString()))
         {
-            LevelScr levelGenerator = aiEnv.GetComponent<LevelScr>();
-            levelGenerator.SetLevel();
-        }
-
-        foreach (GameObject trainAiEnv in GameObject.FindGameObjectsWithTag(Const.Tags.TrainAiEnv.ToString()))
-        {
-            TrainLevelScr levelGenerator = trainAiEnv.GetComponent<TrainLevelScr>();
-            levelGenerator.SetLevel();
+            MyAgent levelGenerator = trainAiEnv.GetComponent<MyAgent>();
+            levelGenerator.EndEpisode();
         }
     }
 }
