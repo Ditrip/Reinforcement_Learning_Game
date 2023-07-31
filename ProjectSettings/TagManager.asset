@@ -14,6 +14,9 @@ TagManager:
   - JumpWall
   - TrainAiEnv
   - Pillar
+  - PrevPlatform
+  - LeftJumpWall
+  - RightJumpWall
   layers:
   - Default
   - TransparentFX

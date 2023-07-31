@@ -22,7 +22,8 @@ public class MyAgent : Agent
     private bool _isAgentJumping;
     private bool _checkCoroutineJump;
     private bool _isAgentFailed;
-    // private int _platformID;
+    private int _currentPlatformID;
+    private int _lastPlatformID;
 
 
     // Start is called before the first frame update
@@ -55,7 +56,8 @@ public class MyAgent : Agent
         sensor.AddObservation(_isAgentReachGoal);
         sensor.AddObservation(_isAgentJumping);
         sensor.AddObservation(_isAgentFailed);
-        // sensor.AddObservation(_platformID);
+        sensor.AddObservation(_lastPlatformID);
+        sensor.AddObservation(_currentPlatformID);
         //This observation is used to inform the agent how far he is from last platform
         // sensor.AddObservation(Vector3.Distance(targetPos,_lastPlatform.transform.localPosition));
     }
@@ -155,6 +157,8 @@ public class MyAgent : Agent
         _checkCoroutineJump = true;
         _isAgentFailed = false;
         killAgent = false;
+        _currentPlatformID = -1;
+        _lastPlatformID = -1;
         // _platformID = (int)levelScr.rootPlatform.GetComponent<Platform>().GetPlatform();
     }
 
@@ -183,17 +187,12 @@ public class MyAgent : Agent
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString()))
+        if (collision.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString())
+            || collision.gameObject.tag.Equals(Const.Tags.Platform.ToString())
+            || collision.gameObject.tag.Equals(Const.Tags.PrevPlatform.ToString())
+            || collision.gameObject.tag.Equals(Const.Tags.RootPlatform.ToString()))
         {
-            
-            if (collision.gameObject.TryGetComponent<Platform>(out Platform platform)){
-                platform.RewardAgent(gameObject);
-                // _platformID = (int)platform.GetPlatform();
-                // Debug.Log("Current platform ID: " + _platformID);
-            }
-            else
-                Debug.LogWarning("Tagged object ("+Const.Tags.NextPlatform + ") does not have required script (Platform)");
-
+            SetPlatformID(collision.gameObject);
             return;
         }
 
@@ -228,7 +227,9 @@ public class MyAgent : Agent
         if (_checkCoroutineJump)
         {
             if (collisionInfo.gameObject.tag.Equals(Const.Tags.Platform.ToString())
-                || collisionInfo.gameObject.tag.Equals(Const.Tags.RootPlatform.ToString()))
+                || collisionInfo.gameObject.tag.Equals(Const.Tags.RootPlatform.ToString())
+                || collisionInfo.gameObject.tag.Equals(Const.Tags.PrevPlatform.ToString())
+                || collisionInfo.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString()))
             {
                 _isAgentJumping = false;
             }
@@ -240,5 +241,37 @@ public class MyAgent : Agent
         _checkCoroutineJump = false;
         yield return new WaitForSeconds(1);
         _checkCoroutineJump = true;
+    }
+
+    private void SetPlatformID(GameObject platform)
+    {
+        int id = levelScr.GetPlatformIDFromList(platform);
+        _lastPlatformID = id > _lastPlatformID ? id : _lastPlatformID;
+        
+        if (platform.gameObject.TryGetComponent<Platform>(out Platform platformScr)){
+            if (platformScr.RewardAgent(gameObject))
+            {
+                AddReward(0.5f);
+            }
+            else
+            {
+                if (_lastPlatformID != id && _currentPlatformID != id && _currentPlatformID > id)
+                {
+                    //plus 2 is used to prevent wrong platform id difference calculation
+                    //since root platform is -1
+                    //e.g last = 1 , current = -1 : (1-(-1)) = 1 (wrong, should be 2, even with absolute value is wrong)
+                    //e.g (with +2) last = 1 , current = -1 : ((2+1)-(2-1)) = 2
+                    AddReward(-0.01f * ( (2 + _lastPlatformID) - (2 + id) ) );
+                    Debug.Log("Dif: " +((2 + _lastPlatformID) - (2 + id)) 
+                        + " Reward: " + (-0.01f * ( (2 + _lastPlatformID) - (2 + id) ) ));
+                }
+            }
+        }
+        else
+            Debug.LogWarning("Tagged object ("+platform.tag + ") does not have required script (Platform)");
+        
+        _currentPlatformID = id;
+        
+        // Debug.Log("Current platform ID: " + _currentPlatformID + " Last platform ID: " + _lastPlatformID);
     }
 }

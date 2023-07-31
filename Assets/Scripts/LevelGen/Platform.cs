@@ -20,12 +20,13 @@ public class Platform : MonoBehaviour
             if (agent == agentList)
             {
                 Debug.Log("Agent is already rewarded");
+                // agent.GetComponent<MyAgent>().AddReward(-0.1f);
                 return false;
             }
         }
         Debug.Log("Agent is rewarded");
         _agentList.Add(agent);
-        agent.GetComponent<MyAgent>().AddReward(0.5f);
+        // agent.GetComponent<MyAgent>().AddReward(0.5f);
         gameObject.tag = Const.Tags.Platform.ToString();
         return true;
     }

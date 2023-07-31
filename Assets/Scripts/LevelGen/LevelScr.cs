@@ -19,7 +19,8 @@ public class LevelScr : MonoBehaviour
     public bool walls = false;
     public int spawnChanceUniquePlat = 30;
     private List<GameObject> _platformList;
-    private bool _checkUniquePlatformSpawn; // Is used to prevent spawn of two unique platform in row
+    private bool _checkPillarPlatformSpawn; // Is used to prevent spawn jump wall platform after platform with pillars
+    // because the pillar can block the path for agent
     
     private static int _lvlCounter = 0;
 
@@ -35,7 +36,7 @@ public class LevelScr : MonoBehaviour
     public void SetLevel()
     {
         _platformList ??= new List<GameObject>(); // ??= (Is Platform list null?)
-        _checkUniquePlatformSpawn = false;
+        _checkPillarPlatformSpawn = false;
         MyPlayerPrefs.PlayerStats playerStats = MyPlayerPrefs.GetInstance();
         uint level = playerStats.GetLevel();
         Const.Direction prevDir = Const.Direction.Up;
@@ -178,16 +179,21 @@ public class LevelScr : MonoBehaviour
     private GameObject GetRandomPlatform()
     {
         int chanceSpawn = Random.Range(0, 101);
+        GameObject platformObj = null;
         // Debug.Log("Level scr(Random Value: " + chanceSpawn + ")");
 
-        if (chanceSpawn <= spawnChanceUniquePlat && !_checkUniquePlatformSpawn)
+        if (chanceSpawn <= spawnChanceUniquePlat)
         {
             Array platforms = Enum.GetValues(typeof(Const.Platforms));
             // Range set from 1 because 0 equals to default platform
             Const.Platforms platform = (Const.Platforms)platforms.GetValue(Random.Range(1, platforms.Length));
             // Debug.Log("Unique platform has spawned (Platform: " + platform.ToString() + ")");
+            if (_checkPillarPlatformSpawn && platform == Const.Platforms.JumpWall)
+            {
+                platform = Const.Platforms.Default;
+                _checkPillarPlatformSpawn = false;
+            }
 
-            GameObject platformObj;
 
             switch (platform)
             {
@@ -202,19 +208,39 @@ public class LevelScr : MonoBehaviour
                     break;
                 case Const.Platforms.Pillars:
                     platformObj = Instantiate(pillarsPrefab, gameObject.transform);
+                    _checkPillarPlatformSpawn = true;
                     break;
                 default:
                     Debug.Log("Level Scr (Unique platform set to 'default')");
                     platformObj = Instantiate(platformPrefab, gameObject.transform);
                     break;
             }
-
-            _checkUniquePlatformSpawn = true;
-            return platformObj;
+            
         }
 
-        _checkUniquePlatformSpawn = false;
-        return Instantiate(platformPrefab, gameObject.transform);
+        if (platformObj is null)
+        {
+            _checkPillarPlatformSpawn = false;
+            platformObj = Instantiate(platformPrefab, gameObject.transform);
+        }
+        
+        
+        return platformObj;
+    }
+
+    public int GetPlatformIDFromList(GameObject platform)
+    {
+        int id = _platformList.IndexOf(platform);
+        SetPlatformTagToPrev(id);
+        return id;
+    }
+
+    private void SetPlatformTagToPrev(int lastID)
+    {
+        for (int i = 0; i < lastID; i++)
+        {
+            _platformList[i].tag = Const.Tags.PrevPlatform.ToString();
+        }
     }
 
 }

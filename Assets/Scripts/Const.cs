@@ -28,7 +28,10 @@ public class Const
         NextPlatform,
         JumpWall,
         TrainAiEnv,
-        Obstacle
+        Obstacle,
+        PrevPlatform,
+        LeftJumpWall,
+        RightJumpWall
     }
 
     public enum Platforms

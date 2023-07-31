@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 7
+    VectorObservationSize: 9
     NumStackedVectorObservations: 3
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -298,6 +298,7 @@ MonoBehaviour:
   m_DetectableTags:
   - Platform
   - NextPlatform
+  - PrevPlatform
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.2
@@ -326,6 +327,7 @@ MonoBehaviour:
   m_DetectableTags:
   - Platform
   - NextPlatform
+  - PrevPlatform
   m_RaysPerDirection: 4
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.2
@@ -356,6 +358,8 @@ MonoBehaviour:
   - JumpWall
   - Pillar
   - Wall
+  - LeftJumpWall
+  - RightJumpWall
   m_RaysPerDirection: 6
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.2
@@ -381,7 +385,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SensorName: RayPerceptionSensorHigh
-  m_DetectableTags: []
+  m_DetectableTags:
+  - JumpWall
+  - LeftJumpWall
+  - RightJumpWall
   m_RaysPerDirection: 6
   m_MaxRayDegrees: 75
   m_SphereCastRadius: 0.2
