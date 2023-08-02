@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ButtonScr : MonoBehaviour
+public class DebugMenu : MonoBehaviour
 {
     public void NextLevelButton()
     {
@@ -35,5 +36,13 @@ public class ButtonScr : MonoBehaviour
             MyAgent levelGenerator = trainAiEnv.GetComponent<MyAgent>();
             levelGenerator.EndEpisode();
         }
+    }
+
+    public void SetGameSpeed(GameObject sliderObj)
+    {
+        Slider slider = sliderObj.GetComponent<Slider>();
+        Time.timeScale = slider.value;
+        slider.GetComponent<GSSlider>().ValueChanged();
+        
     }
 }
