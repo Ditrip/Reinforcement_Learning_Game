@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -24,6 +25,10 @@ public class MyAgent : Agent
     private bool _isAgentFailed;
     private int _currentPlatformID;
     private int _lastPlatformID;
+    private const int MaxStepsOnStart = 200;
+    private uint _stepsCount;
+
+    private string _path;
 
 
     // Start is called before the first frame update
@@ -38,17 +43,34 @@ public class MyAgent : Agent
         }
         
         _rigidBody = gameObject.GetComponent<Rigidbody>();
+        
+        _path = Application.dataPath;
+        _path += "/logSteps.txt";
+        // Debug.Log("Current Path: " + _path);
+        if (!File.Exists(_path))
+        {
+            File.Create(_path);
+        }
+    }
+    
+    public override void OnEpisodeBegin()
+    {
+        levelScr.SetLevel();
+        _isAgentTouchingWall = false;
+        _isAgentFell = false;
+        _isAgentJumping = false;
+        _checkCoroutineJump = true;
+        _isAgentFailed = false;
+        killAgent = false;
+        _currentPlatformID = -1;
+        _lastPlatformID = -1;
+        // MaxStep = MaxStepsOnStart;
+        _stepsCount = 0;
+        // _platformID = (int)levelScr.rootPlatform.GetComponent<Platform>().GetPlatform();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Vector3 agentPos = gameObject.transform.localPosition;
-        // Vector3 agentRotation = gameObject.transform.rotation.eulerAngles;
-        // Vector3 targetPos = levelScr.target.transform.localPosition;
-        // sensor.AddObservation(agentPos.x);
-        // sensor.AddObservation(agentPos.z);
-        // sensor.AddObservation(targetPos.x);
-        // sensor.AddObservation(targetPos.z);
         sensor.AddObservation(_rigidBody.velocity.x);
         sensor.AddObservation(_rigidBody.velocity.z);
         sensor.AddObservation(_isAgentTouchingWall);
@@ -59,7 +81,6 @@ public class MyAgent : Agent
         sensor.AddObservation(_lastPlatformID);
         sensor.AddObservation(_currentPlatformID);
         //This observation is used to inform the agent how far he is from last platform
-        // sensor.AddObservation(Vector3.Distance(targetPos,_lastPlatform.transform.localPosition));
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -95,15 +116,23 @@ public class MyAgent : Agent
 
         if (_isAgentReachGoal)
         {
-            Debug.Log("Agent reach goal (OnActionReceived)");
+            // Debug.Log("Agent reach goal (OnActionReceived)");
             SetReward(10);
             levelScr.SetNextLevel();
+            using (StreamWriter sw = File.AppendText(_path))
+            {
+                sw.WriteLine("Level: " + MyPlayerPrefs.GetInstance().level + " Steps: " + _stepsCount);
+            }
             EndEpisode();
             _isAgentReachGoal = false;
+            
             return;
         }
 
         AddReward(-0.001f);
+        _stepsCount++;
+        // if(_stepsCount%100 == 0)
+        //     Debug.Log("Steps count: " + _stepsCount);
     }
 
     private void MoveAgent(int moveAct, int rotateAct, int jumpAction)
@@ -146,20 +175,6 @@ public class MyAgent : Agent
         }
         
         transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
-    }
-
-    public override void OnEpisodeBegin()
-    {
-        levelScr.SetLevel();
-        _isAgentTouchingWall = false;
-        _isAgentFell = false;
-        _isAgentJumping = false;
-        _checkCoroutineJump = true;
-        _isAgentFailed = false;
-        killAgent = false;
-        _currentPlatformID = -1;
-        _lastPlatformID = -1;
-        // _platformID = (int)levelScr.rootPlatform.GetComponent<Platform>().GetPlatform();
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -262,8 +277,8 @@ public class MyAgent : Agent
                     //e.g last = 1 , current = -1 : (1-(-1)) = 1 (wrong, should be 2, even with absolute value is wrong)
                     //e.g (with +2) last = 1 , current = -1 : ((2+1)-(2-1)) = 2
                     AddReward(-0.01f * ( (2 + _lastPlatformID) - (2 + id) ) );
-                    Debug.Log("Dif: " +((2 + _lastPlatformID) - (2 + id)) 
-                        + " Reward: " + (-0.01f * ( (2 + _lastPlatformID) - (2 + id) ) ));
+                    // Debug.Log("Dif: " +((2 + _lastPlatformID) - (2 + id)) 
+                    //     + " Reward: " + (-0.01f * ( (2 + _lastPlatformID) - (2 + id) ) ));
                 }
             }
         }
@@ -271,7 +286,12 @@ public class MyAgent : Agent
             Debug.LogWarning("Tagged object ("+platform.tag + ") does not have required script (Platform)");
         
         _currentPlatformID = id;
-        
+
         // Debug.Log("Current platform ID: " + _currentPlatformID + " Last platform ID: " + _lastPlatformID);
+    }
+
+    public void IncreaseMaxSteps(int steps)
+    {
+        MaxStep += steps;
     }
 }
