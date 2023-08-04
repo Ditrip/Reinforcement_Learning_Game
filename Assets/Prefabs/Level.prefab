@@ -845,7 +845,7 @@ MonoBehaviour:
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}
   numOfRepeatedLvl: 10
-  walls: 1
+  walls: 0
   spawnChanceUniquePlat: 30
 --- !u!1 &8224913837741513709
 GameObject:

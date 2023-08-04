@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -120,7 +121,8 @@ public class LevelScr : MonoBehaviour
             }
 
             platform.transform.position = platformPos;
-            
+            if(!walls)
+                CheckMergePlatform(platformPos);
             parentPlatform = platform;
             prevDir = newDir;
         }
@@ -128,7 +130,30 @@ public class LevelScr : MonoBehaviour
         SetTarget(parentPlatform);
         SetAgent();
     }
-    
+
+    private void CheckMergePlatform(Vector3 childPlatformPos)
+    {
+        if (_platformList.Count > 2)
+        {
+            if (Math.Abs(childPlatformPos.x - rootPlatform.transform.position.x) < 0.1f &&
+                childPlatformPos.z - rootPlatform.transform.position.z <= 10)
+            {
+                _platformList[^1].GetComponent<PlatformWalls>().WallHandle(Const.Direction.Down,true);
+                _platformList[^1].GetComponent<PlatformWalls>().SetWallHeight(Const.Direction.Down,Const.WallHeight.High);
+                return;
+            }
+            for (int i = _platformList.Count - 3; i >= 0; i--)
+            {
+                if (Math.Abs(childPlatformPos.x - _platformList[i].transform.position.x) < 0.1f &&
+                    childPlatformPos.z - _platformList[i].transform.position.z <= 10)
+                {
+                    _platformList[^1].GetComponent<PlatformWalls>().WallHandle(Const.Direction.Down,true);
+                    _platformList[^1].GetComponent<PlatformWalls>().SetWallHeight(Const.Direction.Down,Const.WallHeight.High);
+                    break;
+                }
+            }
+        }
+    }
     private void ResetLevel()
     {
         
