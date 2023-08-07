@@ -24,6 +24,19 @@ public class LevelScr : MonoBehaviour
     // because the pillar can block the path for agent
     
     private static int _lvlCounter = 0;
+    
+    public readonly struct ObstNum //This struct is used to collect statistics
+    {
+        public ObstNum(int defaultNum, int pillarNum, int jumpWallNum)
+        {
+            DefaultNum = defaultNum;
+            PillarNum = pillarNum;
+            JumpWallNum = jumpWallNum;
+        }
+        public int DefaultNum { get; }
+        public int PillarNum { get; }
+        public int JumpWallNum { get; }
+    }
 
     public void Start()
     {
@@ -268,4 +281,27 @@ public class LevelScr : MonoBehaviour
         }
     }
 
+    public ObstNum GetNumberOfObstacles()
+    {
+        int defaultPlat = 0;
+        int pillarPlat = 0;
+        int jumpWallPlat = 0;
+        foreach (GameObject platform in _platformList)
+        {
+            switch (platform.GetComponent<Platform>().GetPlatform())
+            {
+                case Const.Platforms.Default:
+                    defaultPlat++;
+                    break;
+                case Const.Platforms.Pillars:
+                    pillarPlat++;
+                    break;
+                case Const.Platforms.JumpWall:
+                    jumpWallPlat++;
+                    break;
+            }
+        }
+
+        return new ObstNum(defaultPlat,pillarPlat,jumpWallPlat);
+    }
 }

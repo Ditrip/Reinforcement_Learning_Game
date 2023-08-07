@@ -27,8 +27,7 @@ public class MyAgent : Agent
     private int _lastPlatformID;
     private const int MaxStepsOnStart = 200;
     private uint _stepsCount;
-
-    private string _path;
+    
 
 
     // Start is called before the first frame update
@@ -44,13 +43,6 @@ public class MyAgent : Agent
         
         _rigidBody = gameObject.GetComponent<Rigidbody>();
         
-        _path = Application.dataPath;
-        _path += "/logSteps.txt";
-        // Debug.Log("Current Path: " + _path);
-        if (!File.Exists(_path))
-        {
-            File.Create(_path);
-        }
     }
     
     public override void OnEpisodeBegin()
@@ -118,11 +110,8 @@ public class MyAgent : Agent
         {
             // Debug.Log("Agent reach goal (OnActionReceived)");
             SetReward(10);
+            Statistic.GetInstance().CollectStats((int)MyPlayerPrefs.GetInstance().level,_stepsCount,levelScr.GetNumberOfObstacles());
             levelScr.SetNextLevel();
-            using (StreamWriter sw = File.AppendText(_path))
-            {
-                sw.WriteLine("Level: " + MyPlayerPrefs.GetInstance().level + " Steps: " + _stepsCount);
-            }
             EndEpisode();
             _isAgentReachGoal = false;
             
