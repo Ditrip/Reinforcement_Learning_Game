@@ -17,6 +17,12 @@ TagManager:
   - PrevPlatform
   - LeftJumpWall
   - RightJumpWall
+  - Target1
+  - Target2
+  - Target3
+  - Goal1
+  - Goal2
+  - Goal3
   layers:
   - Default
   - TransparentFX

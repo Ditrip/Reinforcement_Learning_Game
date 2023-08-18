@@ -10,7 +10,7 @@ public class TrainLevelScr : LevelScr
     [HideInInspector] 
     public bool isOdd;
 
-    public GameObject InstantiatePlatform()
+    public GameObject InstantiatePlatform(Const.Direction dir)
     {
         
         GameObject platform;
@@ -25,17 +25,14 @@ public class TrainLevelScr : LevelScr
         
         switch (platforms)
         {
-            // case Const.Platforms.FallingObj:
-            //     platform = Instantiate(fallingObjPrefab, gameObject.transform);
-            //     break;
-            // case Const.Platforms.FadePlatform:
-            //     platform = Instantiate(fadePlatformPrefab, gameObject.transform);
-            //     break;
             case Const.Platforms.JumpWall:
                 platform = Instantiate(jumpWallPrefab, gameObject.transform);
                 break;
             case Const.Platforms.Pillars:
                 platform = Instantiate(pillarsPrefab, gameObject.transform);
+                break;
+            case Const.Platforms.Path:
+                platform = Instantiate(pathPrefab, gameObject.transform);
                 break;
             default:
                 Debug.Log("TrainLevelScr(Platform set to 'default')");

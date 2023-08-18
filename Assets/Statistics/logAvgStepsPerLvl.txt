@@ -1,33 +1,31 @@
-[Trained Model]
-Level: 1 Steps: 81.9090909090909
-Level: 2 Steps: 110.818181818182
-Level: 3 Steps: 120.181818181818
-Level: 4 Steps: 273
-Level: 5 Steps: 268.363636363636
-Level: 6 Steps: 364.636363636364
-Level: 7 Steps: 422.363636363636
-Level: 8 Steps: 508.636363636364
-Level: 9 Steps: 533.545454545455
-Level: 10 Steps: 582.272727272727
-Level: 11 Steps: 743.583333333333
-Level: 12 Steps: 681.384615384615
-Level: 13 Steps: 774.642857142857
-Level: 14 Steps: 850.133333333333
-Level: 15 Steps: 941.375
-Level: 16 Steps: 1028.17647058824
-Level: 17 Steps: 1187.44444444444
-Level: 18 Steps: 1213.68421052632
-Level: 19 Steps: 1189.3
-Level: 20 Steps: 1351.80952380952
-Level: 21 Steps: 1375.40909090909
-Level: 22 Steps: 1422.39130434783
-Level: 23 Steps: 1531.625
-Level: 24 Steps: 1666.08
-Level: 25 Steps: 1697.69230769231
-Level: 26 Steps: 2106.03703703704
-Level: 27 Steps: 1668.89285714286
-Level: 28 Steps: 1716.86206896552
-Level: 29 Steps: 1805.73333333333
-Level: 30 Steps: 1755.45161290323
-Level: 31 Steps: 2446.28125
-Level: 32 Steps: 1941.24242424242
+
+	Time: 8/9/2023 3:04:31 PM
+
+Level: 1 Steps: 51.8181818181818
+Level: 2 Steps: 120.909090909091
+
+	Time: 8/9/2023 3:05:03 PM
+
+Level: 1 Steps: 49.4545454545455
+Level: 2 Steps: 127.909090909091
+Level: 3 Steps: 199.636363636364
+Level: 4 Steps: 245.727272727273
+
+	Time: 8/11/2023 9:00:11 PM
+
+Level: 1 Steps: 74.0909090909091
+Level: 2 Steps: 138.636363636364
+Level: 3 Steps: 175.2
+
+	Time: 8/11/2023 9:02:14 PM
+
+Level: 1 Steps: 143.090909090909
+Level: 2 Steps: 435.454545454545
+
+	Time: 8/16/2023 2:00:12 PM
+
+Level: 1 Steps: 39
+
+	Time: 8/18/2023 2:46:56 PM
+
+Level: 1 Steps: 206.636363636364

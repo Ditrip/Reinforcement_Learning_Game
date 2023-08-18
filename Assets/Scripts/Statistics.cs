@@ -22,6 +22,7 @@ public class Statistic
     private Statistic()
     {
         SetFiles();
+        // SetTime();
         _numOfSteps = new List<int>();
         _numOfObstacles = new List<LevelScr.ObstNum>();
         _currentLvl = -1;
@@ -33,10 +34,22 @@ public class Statistic
         _path += "/Statistics/";
         foreach (string logFile in LOGFiles)
         {
-            if (!File.Exists(_path+logFile))
+            FileStream fileStream;
+            if (!File.Exists(_path + logFile))
             {
-                File.Create(_path+logFile);
+                 fileStream = new FileStream(_path + logFile, FileMode.Create,
+                    FileAccess.Write);
             }
+            else
+            {
+                fileStream = new FileStream(_path + logFile, FileMode.Append,
+                    FileAccess.Write);
+            }
+            
+            StreamWriter sw = new StreamWriter(fileStream);
+            sw.WriteLine("\n\tTime: " +System.DateTime.Now + "\n");
+            sw.Close();
+            fileStream.Close();
         }
     }
 
@@ -65,6 +78,7 @@ public class Statistic
         using (StreamWriter sw = File.AppendText(_path+LOGFiles[0]))
         {
             sw.WriteLine("Level: " + level + " Steps: " + avgSteps);
+            sw.Close();
         }
     }
 
@@ -90,6 +104,7 @@ public class Statistic
         {
             sw.WriteLine("Level: " + level + "\n\tDefault: %" + avgDefault*100 
             + "\n\tPillar: %" + avgPillar*100 + "\n\tJumpWall: %" + avgJumpWall*100);
+            sw.Close();
         }
     }
 }

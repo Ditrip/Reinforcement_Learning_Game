@@ -1,0 +1,131 @@
+
+	Time: 8/9/2023 1:27:13 PM
+
+Level: 1
+	Default: %54.54546
+	Pillar: %27.27273
+	JumpWall: %18.18182
+Level: 2
+	Default: %90.9091
+	Pillar: %9.090909
+	JumpWall: %0
+Level: 3
+	Default: %81.81818
+	Pillar: %12.12121
+	JumpWall: %6.060606
+Level: 4
+	Default: %77.27273
+	Pillar: %4.545455
+	JumpWall: %18.18182
+Level: 5
+	Default: %78.18182
+	Pillar: %12.72727
+	JumpWall: %9.090909
+Level: 6
+	Default: %71.21212
+	Pillar: %16.66667
+	JumpWall: %12.12121
+Level: 7
+	Default: %70.12987
+	Pillar: %12.98701
+	JumpWall: %16.88312
+Level: 8
+	Default: %65.9091
+	Pillar: %17.04545
+	JumpWall: %17.04545
+Level: 9
+	Default: %73.73737
+	Pillar: %3.030303
+	JumpWall: %23.23232
+Level: 10
+	Default: %71.81818
+	Pillar: %10
+	JumpWall: %18.18182
+Level: 11
+	Default: %70.45454
+	Pillar: %6.818182
+	JumpWall: %22.72727
+Level: 12
+	Default: %67.30769
+	Pillar: %15.38462
+	JumpWall: %17.30769
+Level: 13
+	Default: %75.82418
+	Pillar: %7.142858
+	JumpWall: %17.03297
+Level: 14
+	Default: %72.85714
+	Pillar: %8.571429
+	JumpWall: %18.57143
+Level: 15
+	Default: %73.75
+	Pillar: %8.75
+	JumpWall: %17.5
+Level: 16
+	Default: %72.05882
+	Pillar: %10.66176
+	JumpWall: %17.27941
+Level: 17
+	Default: %65.68627
+	Pillar: %13.0719
+	JumpWall: %21.24183
+Level: 18
+	Default: %72.51462
+	Pillar: %12.5731
+	JumpWall: %14.91228
+Level: 19
+	Default: %69.47369
+	Pillar: %11.57895
+	JumpWall: %18.94737
+Level: 20
+	Default: %70.2381
+	Pillar: %10.71429
+	JumpWall: %19.04762
+Level: 21
+	Default: %72.07793
+	Pillar: %11.68831
+	JumpWall: %16.23377
+Level: 22
+	Default: %67.78656
+	Pillar: %12.45059
+	JumpWall: %19.76285
+Level: 23
+	Default: %71.73913
+	Pillar: %13.22464
+	JumpWall: %15.03623
+Level: 24
+	Default: %69
+	Pillar: %11.16667
+	JumpWall: %19.83333
+Level: 25
+	Default: %69.23077
+	Pillar: %17.23077
+	JumpWall: %13.53846
+Level: 26
+	Default: %71.08262
+	Pillar: %12.53561
+	JumpWall: %16.38177
+Level: 27
+	Default: %69.57672
+	Pillar: %14.81481
+	JumpWall: %15.60847
+Level: 28
+	Default: %69.58128
+	Pillar: %15.64039
+	JumpWall: %14.77833
+Level: 29
+	Default: %71.60919
+	Pillar: %13.44828
+	JumpWall: %14.94253
+Level: 30
+	Default: %67.63441
+	Pillar: %14.94624
+	JumpWall: %17.41936
+Level: 31
+	Default: %67.33871
+	Pillar: %13.00403
+	JumpWall: %19.65726
+Level: 32
+	Default: %69.22349
+	Pillar: %11.64773
+	JumpWall: %19.12879

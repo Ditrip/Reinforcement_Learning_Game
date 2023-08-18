@@ -110,7 +110,8 @@ public class MyAgent : Agent
         {
             // Debug.Log("Agent reach goal (OnActionReceived)");
             SetReward(10);
-            Statistic.GetInstance().CollectStats((int)MyPlayerPrefs.GetInstance().level,_stepsCount,levelScr.GetNumberOfObstacles());
+            if(levelScr.GetLevel() == MyPlayerPrefs.GetInstance().GetLevel())
+                Statistic.GetInstance().CollectStats((int)levelScr.GetLevel(),_stepsCount,levelScr.GetNumberOfObstacles());
             levelScr.SetNextLevel();
             EndEpisode();
             _isAgentReachGoal = false;

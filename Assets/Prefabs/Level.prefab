@@ -177,7 +177,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 54d80dad451fd314192bbeff8fc5c1f6, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 300bebfed21ad65448c571edfef854e3, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Agent
@@ -841,6 +841,7 @@ MonoBehaviour:
   fadePlatformPrefab: {fileID: 4390864954431106648, guid: 06ccbeedca861ed42bf074c6133d06fa, type: 3}
   jumpWallPrefab: {fileID: 4390864954431106648, guid: 824834514a1311d4a88c054555b7159b, type: 3}
   pillarsPrefab: {fileID: 4390864954431106648, guid: e430fd9793ba54e439d909304bbb7121, type: 3}
+  pathPrefab: {fileID: 4390864954431106648, guid: 87a05173583c81d4fa52c75798087fbf, type: 3}
   target: {fileID: 695694715865812590}
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}

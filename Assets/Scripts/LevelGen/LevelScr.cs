@@ -13,6 +13,7 @@ public class LevelScr : MonoBehaviour
     public GameObject fadePlatformPrefab;
     public GameObject jumpWallPrefab;
     public GameObject pillarsPrefab;
+    public GameObject pathPrefab;
     public GameObject target;
     public GameObject agent;
     public GameObject rootPlatform;
@@ -22,7 +23,8 @@ public class LevelScr : MonoBehaviour
     private List<GameObject> _platformList;
     private bool _checkPillarPlatformSpawn; // Is used to prevent spawn jump wall platform after platform with pillars
     // because the pillar can block the path for agent
-    
+
+    private uint _level;
     private static int _lvlCounter = 0;
     
     public readonly struct ObstNum //This struct is used to collect statistics
@@ -49,12 +51,12 @@ public class LevelScr : MonoBehaviour
     }
     public void SetLevel()
     {
+        _level = MyPlayerPrefs.GetInstance().GetLevel();
         _platformList ??= new List<GameObject>(); // ??= (Is Platform list null?)
         _checkPillarPlatformSpawn = false;
-        MyPlayerPrefs.PlayerStats playerStats = MyPlayerPrefs.GetInstance();
-        uint level = playerStats.GetLevel();
         Const.Direction prevDir = Const.Direction.Up;
         GameObject parentPlatform = rootPlatform;
+        parentPlatform.GetComponent<Platform>().Direction = prevDir;
         parentPlatform.GetComponent<PlatformWalls>().SetWallsActive(walls);
         parentPlatform.GetComponent<PlatformWalls>().SetHeight(Const.WallHeight.High);
         ResetLevel();
@@ -63,32 +65,11 @@ public class LevelScr : MonoBehaviour
         if (trainLevelScr is not null)
             trainLevelScr.isOdd = true;
 
-        for (int i = 0; i < level; i++)
+        for (int i = 0; i < _level; i++)
         {
-            GameObject platform;
-            if (trainLevelScr is null)
-            {
-                // platform = Instantiate(platformPrefab, gameObject.transform);
-                platform = GetRandomPlatform();
-            }
-            else
-            {
-                platform = trainLevelScr.InstantiatePlatform();
-            }
-            platform.transform.position = new Vector3(0, 0, 0);
-            _platformList.Add(platform);
-            
-            PlatformWalls parentPlatformWalls = parentPlatform.GetComponent<PlatformWalls>();
-            PlatformWalls childPlatformWalls = platform.GetComponent<PlatformWalls>();
-            // By default all walls are active
-            childPlatformWalls.SetWallsActive(walls);
-            childPlatformWalls.SetHeight(Const.WallHeight.High);
-            
             // Generates random direction of next platform (Up,Left,Right (See Const enum))
             Const.Direction newDir = (Const.Direction) Random.Range(0, 3);
-
-            Vector3 platformPos = parentPlatform.transform.position;
-
+            
             // This if statement used for preventing opposite directions (except up dir)
             // e.g if prev platform has spawned on the right
             // it can not spawn on the left (same position of prev platform)
@@ -102,42 +83,51 @@ public class LevelScr : MonoBehaviour
                 {
                     newDir = (Const.Direction)Random.Range(0, 2);
                 }
-                
             }
             
+            GameObject platform;
+            
+            if (trainLevelScr is null)
+                platform = GetRandomPlatform();
+            else
+                platform = trainLevelScr.InstantiatePlatform(newDir);
+
+            platform.transform.position = new Vector3(0, 0, 0);
+            _platformList.Add(platform);
+            
+            platform.GetComponent<Platform>().Direction = newDir;
+            platform.GetComponent<Platform>().ParentPlatform = parentPlatform;
+            
+            PlatformWalls parentPlatformWalls = parentPlatform.GetComponent<PlatformWalls>();
+            PlatformWalls childPlatformWalls = platform.GetComponent<PlatformWalls>();
+            // By default all walls are active
+            childPlatformWalls.SetWallsActive(walls);
+            childPlatformWalls.SetHeight(Const.WallHeight.High);
+
+            Vector3 platformPos = parentPlatform.transform.position;
+            
             parentPlatformWalls.WallHandle(newDir,false);
-            // Declare anonymous method
-            void IsJumpPlatform(Const.Direction dir)
-            {
-                if (childPlatformWalls.TryGetComponent<JumpWall>(out JumpWall jumpWall)){
-                    jumpWall.SetJumpWall(dir);
-                    childPlatformWalls.SetWallHeight(dir,Const.WallHeight.Normal);
-                }
-                else
-                    childPlatformWalls.WallHandle(dir, false);
-            }
 
             switch (newDir)
             {
                 case Const.Direction.Up:
-                    IsJumpPlatform(Const.Direction.Down);
                     platformPos.z += Const.PlatformSize;
                     break;
                 case Const.Direction.Left:
-                    IsJumpPlatform(Const.Direction.Right);
                     platformPos.x -= Const.PlatformSize;
                     break;
                 case Const.Direction.Right:
-                    IsJumpPlatform(Const.Direction.Left);
                     platformPos.x += Const.PlatformSize;
                     break;
             }
-
+            
             platform.transform.position = platformPos;
             if(!walls)
                 CheckMergePlatform(platformPos);
+            ActivateUniquePlatform(platform);
             parentPlatform = platform;
             prevDir = newDir;
+            
         }
         
         SetTarget(parentPlatform);
@@ -190,8 +180,10 @@ public class LevelScr : MonoBehaviour
     
     private void SetAgent()
     {
-        Vector3 pos = (agent.transform.position = rootPlatform.transform.position);
+        Vector3 pos = rootPlatform.transform.position;
+        pos.z -= Const.PlatformSize / 4;
         pos.y += 0.5f;
+        agent.transform.position = pos;
         Rigidbody sphereBody = agent.GetComponent<Rigidbody>();
         sphereBody.velocity = Vector3.zero;
         sphereBody.angularVelocity = Vector3.zero;
@@ -205,7 +197,8 @@ public class LevelScr : MonoBehaviour
             _lvlCounter = 0;
         }
         else{
-            _lvlCounter++;
+            if(_level == MyPlayerPrefs.GetInstance().GetLevel())
+                _lvlCounter++;
             Debug.Log("Repeated level: "+ _lvlCounter + " " + 
                       (MyPlayerPrefs.GetInstance().level > numOfRepeatedLvl ? 
                           MyPlayerPrefs.GetInstance().level : numOfRepeatedLvl));
@@ -222,9 +215,9 @@ public class LevelScr : MonoBehaviour
 
         if (chanceSpawn <= spawnChanceUniquePlat)
         {
-            Array platforms = Enum.GetValues(typeof(Const.Platforms));
+            Array platformsType = Enum.GetValues(typeof(Const.Platforms));
             // Range set from 1 because 0 equals to default platform
-            Const.Platforms platform = (Const.Platforms)platforms.GetValue(Random.Range(1, platforms.Length));
+            Const.Platforms platform = (Const.Platforms)platformsType.GetValue(Random.Range(1, platformsType.Length));
             // Debug.Log("Unique platform has spawned (Platform: " + platform.ToString() + ")");
             if (_checkPillarPlatformSpawn && platform == Const.Platforms.JumpWall)
             {
@@ -235,18 +228,15 @@ public class LevelScr : MonoBehaviour
 
             switch (platform)
             {
-                // case Const.Platforms.FallingObj:
-                //     platformObj = Instantiate(fallingObjPrefab, gameObject.transform);
-                //     break;
-                // case Const.Platforms.FadePlatform:
-                //     platformObj = Instantiate(fadePlatformPrefab, gameObject.transform);
-                //     break;
                 case Const.Platforms.JumpWall:
                     platformObj = Instantiate(jumpWallPrefab, gameObject.transform);
                     break;
                 case Const.Platforms.Pillars:
                     platformObj = Instantiate(pillarsPrefab, gameObject.transform);
                     _checkPillarPlatformSpawn = true;
+                    break;
+                case Const.Platforms.Path:
+                    platformObj = Instantiate(pathPrefab, gameObject.transform);
                     break;
                 default:
                     Debug.Log("Level Scr (Unique platform set to 'default')");
@@ -303,5 +293,40 @@ public class LevelScr : MonoBehaviour
         }
 
         return new ObstNum(defaultPlat,pillarPlat,jumpWallPlat);
+    }
+
+    public uint GetLevel()
+    {
+        return _level;
+    }
+
+    private void ActivateUniquePlatform(GameObject platform)
+    {
+        Platform platformScr = platform.GetComponent<Platform>();
+        Const.Platforms platformType = platformScr.GetPlatform();
+        switch (platformType)
+        {
+            case Const.Platforms.JumpWall:
+                if (platform.TryGetComponent<JumpWall>(out JumpWall jumpWall))
+                {
+                    jumpWall.SetJumpWall(Const.GetOppositeDirection(platformScr.Direction));
+                    platform.GetComponent<PlatformWalls>().SetWallHeight(Const.GetOppositeDirection(platformScr.Direction),Const.WallHeight.Normal);
+                }
+                else
+                    Debug.LogError("LevelScr (ActivatePlatform): JumpWall script doesn't exists");
+                break;
+            case Const.Platforms.Path:
+                if (platform.TryGetComponent<PathGen>(out PathGen pathGen)){
+                    pathGen.SetPlatform(
+                        platformScr.ParentPlatform,
+                        platformScr.ParentPlatform.GetComponent<Platform>().Direction,
+                        platformScr.Direction
+                        );
+                    Debug.Log("Path platform is set");
+                }
+                else
+                    Debug.LogError("LevelScr (ActivatePlatform): PathGen script doesn't exists");
+                break;
+        }
     }
 }
