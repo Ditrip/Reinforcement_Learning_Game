@@ -25,12 +25,6 @@ public class TrainLevelScr : LevelScr
         
         switch (platforms)
         {
-            // case Const.Platforms.FallingObj:
-            //     platform = Instantiate(fallingObjPrefab, gameObject.transform);
-            //     break;
-            // case Const.Platforms.FadePlatform:
-            //     platform = Instantiate(fadePlatformPrefab, gameObject.transform);
-            //     break;
             case Const.Platforms.JumpWall:
                 platform = Instantiate(jumpWallPrefab, gameObject.transform);
                 break;

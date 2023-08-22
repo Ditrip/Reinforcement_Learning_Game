@@ -48,4 +48,31 @@ public class Const
         Normal = 1,
         High = 3
     }
+    
+    public static Direction GetOppositeDirection(Direction dir)
+    {
+        Direction opDir;
+        switch (dir)
+        {
+            case Direction.Left:
+                opDir = Direction.Right;
+                break;
+            case Direction.Up:
+                opDir = Direction.Down;
+                break;
+            case Direction.Right:
+                opDir = Direction.Left;
+                break;
+            case Direction.Down:
+                opDir = Direction.Up;
+                break;
+            default:
+                Debug.LogError("Const.cs (GetOppositeDirection): returned default direction (Up)");
+                opDir = Direction.Up;
+                break;
+        }
+
+        return opDir;
+    }
+
 }

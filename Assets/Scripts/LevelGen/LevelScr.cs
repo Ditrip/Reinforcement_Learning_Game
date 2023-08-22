@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -24,6 +22,7 @@ public class LevelScr : MonoBehaviour
     // because the pillar can block the path for agent
     
     private static int _lvlCounter = 0;
+    private uint _level;
     
     public readonly struct ObstNum //This struct is used to collect statistics
     {
@@ -44,15 +43,12 @@ public class LevelScr : MonoBehaviour
         _lvlCounter = 0;
         MyPlayerPrefs.GetInstance().level = 1;
         MyPlayerPrefs.Save();
-        // GameObject rootPlatform = GameObject.Find("RootPlatform");
-        // _platformList.Add(rootPlatform);
     }
     public void SetLevel()
     {
         _platformList ??= new List<GameObject>(); // ??= (Is Platform list null?)
         _checkPillarPlatformSpawn = false;
-        MyPlayerPrefs.PlayerStats playerStats = MyPlayerPrefs.GetInstance();
-        uint level = playerStats.GetLevel();
+        _level = MyPlayerPrefs.GetInstance().GetLevel();
         Const.Direction prevDir = Const.Direction.Up;
         GameObject parentPlatform = rootPlatform;
         parentPlatform.GetComponent<PlatformWalls>().SetWallsActive(walls);
@@ -63,12 +59,11 @@ public class LevelScr : MonoBehaviour
         if (trainLevelScr is not null)
             trainLevelScr.isOdd = true;
 
-        for (int i = 0; i < level; i++)
+        for (int i = 0; i < _level; i++)
         {
             GameObject platform;
             if (trainLevelScr is null)
             {
-                // platform = Instantiate(platformPrefab, gameObject.transform);
                 platform = GetRandomPlatform();
             }
             else
@@ -120,18 +115,16 @@ public class LevelScr : MonoBehaviour
             switch (newDir)
             {
                 case Const.Direction.Up:
-                    IsJumpPlatform(Const.Direction.Down);
                     platformPos.z += Const.PlatformSize;
                     break;
                 case Const.Direction.Left:
-                    IsJumpPlatform(Const.Direction.Right);
                     platformPos.x -= Const.PlatformSize;
                     break;
                 case Const.Direction.Right:
-                    IsJumpPlatform(Const.Direction.Left);
                     platformPos.x += Const.PlatformSize;
                     break;
             }
+            IsJumpPlatform(Const.GetOppositeDirection(newDir));
 
             platform.transform.position = platformPos;
             if(!walls)
@@ -205,7 +198,8 @@ public class LevelScr : MonoBehaviour
             _lvlCounter = 0;
         }
         else{
-            _lvlCounter++;
+            if(_level == MyPlayerPrefs.GetInstance().GetLevel())
+                _lvlCounter++;
             Debug.Log("Repeated level: "+ _lvlCounter + " " + 
                       (MyPlayerPrefs.GetInstance().level > numOfRepeatedLvl ? 
                           MyPlayerPrefs.GetInstance().level : numOfRepeatedLvl));
@@ -235,12 +229,6 @@ public class LevelScr : MonoBehaviour
 
             switch (platform)
             {
-                // case Const.Platforms.FallingObj:
-                //     platformObj = Instantiate(fallingObjPrefab, gameObject.transform);
-                //     break;
-                // case Const.Platforms.FadePlatform:
-                //     platformObj = Instantiate(fadePlatformPrefab, gameObject.transform);
-                //     break;
                 case Const.Platforms.JumpWall:
                     platformObj = Instantiate(jumpWallPrefab, gameObject.transform);
                     break;
@@ -303,5 +291,10 @@ public class LevelScr : MonoBehaviour
         }
 
         return new ObstNum(defaultPlat,pillarPlat,jumpWallPlat);
+    }
+    
+    public uint GetLevel()
+    {
+        return _level;
     }
 }

@@ -25,7 +25,7 @@ public class MyAgent : Agent
     private bool _isAgentFailed;
     private int _currentPlatformID;
     private int _lastPlatformID;
-    private const int MaxStepsOnStart = 200;
+    private const int MaxStepsOnStart = 500;
     private uint _stepsCount;
     
 
@@ -58,7 +58,6 @@ public class MyAgent : Agent
         _lastPlatformID = -1;
         // MaxStep = MaxStepsOnStart;
         _stepsCount = 0;
-        // _platformID = (int)levelScr.rootPlatform.GetComponent<Platform>().GetPlatform();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -110,7 +109,8 @@ public class MyAgent : Agent
         {
             // Debug.Log("Agent reach goal (OnActionReceived)");
             SetReward(10);
-            Statistic.GetInstance().CollectStats((int)MyPlayerPrefs.GetInstance().level,_stepsCount,levelScr.GetNumberOfObstacles());
+            if(levelScr.GetLevel() == MyPlayerPrefs.GetInstance().GetLevel())
+                Statistic.GetInstance().CollectStats((int)levelScr.GetLevel(),_stepsCount,levelScr.GetNumberOfObstacles());
             levelScr.SetNextLevel();
             EndEpisode();
             _isAgentReachGoal = false;

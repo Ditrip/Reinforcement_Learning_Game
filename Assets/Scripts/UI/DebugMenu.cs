@@ -26,7 +26,7 @@ public class DebugMenu : MonoBehaviour
     {
         MyPlayerPrefs.PlayerStats instance = MyPlayerPrefs.GetInstance();
         instance.Reset();
-        // SetLevelAiEnv();
+        SetLevelAiEnv();
     }
 
     private void SetLevelAiEnv()

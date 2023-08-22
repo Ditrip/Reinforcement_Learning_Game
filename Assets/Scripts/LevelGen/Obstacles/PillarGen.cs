@@ -53,12 +53,6 @@ public class PillarGen : MonoBehaviour
             _pillarList.Add(pillar);
         }
     }
-    
-    private Vector3 GetRandPillarPosition()
-    {
-        
-        return Vector3.zero;
-    }
 
     private List<SpawnRange> GetSpawnPos()
     {

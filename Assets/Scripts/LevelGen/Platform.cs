@@ -26,7 +26,6 @@ public class Platform : MonoBehaviour
         }
         Debug.Log("Agent is rewarded");
         _agentList.Add(agent);
-        // agent.GetComponent<MyAgent>().AddReward(0.5f);
         gameObject.tag = Const.Tags.Platform.ToString();
         return true;
     }
