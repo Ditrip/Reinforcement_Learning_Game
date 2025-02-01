@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Unity.MLAgents;
 
 public class Statistic
 {
@@ -11,8 +12,9 @@ public class Statistic
     private static readonly string[] LOGFiles = new[] { "logAvgStepsPerLvl.txt", "logAvgPlatformsPerLvl.txt" };
     private string _path;
     private int _currentLvl;
-    private List<int> _numOfSteps;
-    private List<LevelScr.ObstNum> _numOfObstacles;
+    private readonly List<int> _numOfSteps;
+    private readonly List<LevelScr.ObstNum> _numOfObstacles;
+    private readonly StatsRecorder _recorder = Academy.Instance.StatsRecorder;
 
     public static Statistic GetInstance()
     {
@@ -66,6 +68,7 @@ public class Statistic
         {
             sw.WriteLine("Level: " + level + " Steps: " + avgSteps);
         }
+        _recorder.Add("Agent/Avg Steps", (float)avgSteps);
     }
 
     private void WriteAvgPlatformPerLvl(int level)
@@ -91,5 +94,8 @@ public class Statistic
             sw.WriteLine("Level: " + level + "\n\tDefault: %" + avgDefault*100 
             + "\n\tPillar: %" + avgPillar*100 + "\n\tJumpWall: %" + avgJumpWall*100);
         }
+        _recorder.Add("Platforms/Avg Default Platform Spawn", (float)avgDefault);
+        _recorder.Add("Platforms/Avg Pillar Platform Spawn", (float)avgPillar);
+        _recorder.Add("Platforms/Avg Jump Wall Platform Spawn", (float)avgJumpWall);
     }
 }
