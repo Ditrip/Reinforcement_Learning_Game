@@ -11,12 +11,14 @@ public class LevelScr : MonoBehaviour
     public GameObject fadePlatformPrefab;
     public GameObject jumpWallPrefab;
     public GameObject pillarsPrefab;
+    public GameObject stepsBonusPrefab;
     public GameObject target;
     public GameObject agent;
     public GameObject rootPlatform;
     public int numOfRepeatedLvl = 5;
     public bool walls = false;
     public int spawnChanceUniquePlat = 30;
+    public int stepsBonusSpawnInterval = 2;
     private List<GameObject> _platformList;
     private bool _checkPillarPlatformSpawn; // Is used to prevent spawn jump wall platform after platform with pillars
     // because the pillar can block the path for agent
@@ -129,6 +131,10 @@ public class LevelScr : MonoBehaviour
             platform.transform.position = platformPos;
             if(!walls)
                 CheckMergePlatform(platformPos);
+            
+            if(i%stepsBonusSpawnInterval == 0 && stepsBonusPrefab)
+                SetStepsBonus(platform);
+            
             parentPlatform = platform;
             prevDir = newDir;
         }
@@ -172,11 +178,7 @@ public class LevelScr : MonoBehaviour
     }
     private void SetTarget(GameObject platform)
     {
-        Vector3 targetPos = platform.transform.position;
-        targetPos.x += Random.Range(-(Const.PlatformSize / 2) + Const.TargetSize / 2,
-            (Const.PlatformSize / 2) - Const.TargetSize / 2);
-        targetPos.z += Random.Range(-(Const.PlatformSize / 2) + Const.TargetSize / 2,
-            (Const.PlatformSize / 2) - Const.TargetSize / 2);
+        Vector3 targetPos = SetRandomPos(platform);
         targetPos.y += Const.TargetSize / 2;
         target.transform.position = targetPos;
     }
@@ -188,6 +190,24 @@ public class LevelScr : MonoBehaviour
         Rigidbody sphereBody = agent.GetComponent<Rigidbody>();
         sphereBody.velocity = Vector3.zero;
         sphereBody.angularVelocity = Vector3.zero;
+    }
+
+    private void SetStepsBonus(GameObject platform)
+    {
+        Vector3 pos = SetRandomPos(platform);
+        pos.y += Const.TargetSize / 2;
+        GameObject stepBonus = Instantiate(stepsBonusPrefab, platform.transform);
+        stepBonus.transform.position = pos;
+    }
+
+    private Vector3 SetRandomPos(GameObject platform)
+    {
+        Vector3 pos  = platform.transform.position;
+        pos.x += Random.Range(-(Const.PlatformSize / 2) + Const.TargetSize / 2,
+            (Const.PlatformSize / 2) - Const.TargetSize / 2);
+        pos.z += Random.Range(-(Const.PlatformSize / 2) + Const.TargetSize / 2,
+            (Const.PlatformSize / 2) - Const.TargetSize / 2);
+        return pos;
     }
 
     public void SetNextLevel()

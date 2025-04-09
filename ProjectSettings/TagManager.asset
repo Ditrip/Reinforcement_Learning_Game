@@ -17,6 +17,7 @@ TagManager:
   - PrevPlatform
   - LeftJumpWall
   - RightJumpWall
+  - StepsBonus
   layers:
   - Default
   - TransparentFX

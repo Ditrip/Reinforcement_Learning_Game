@@ -26,7 +26,7 @@ public class MyAgent : Agent
     private int _currentPlatformID;
     private int _lastPlatformID;
     private const int MaxStepsOnStart = 500;
-    private uint _stepsCount;
+    private uint _currentSteps;
     
 
 
@@ -56,8 +56,8 @@ public class MyAgent : Agent
         killAgent = false;
         _currentPlatformID = -1;
         _lastPlatformID = -1;
-        // MaxStep = MaxStepsOnStart;
-        _stepsCount = 0;
+        MaxStep = MaxStepsOnStart;
+        _currentSteps = 0;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -110,7 +110,7 @@ public class MyAgent : Agent
             // Debug.Log("Agent reach goal (OnActionReceived)");
             SetReward(10);
             if(levelScr.GetLevel() == MyPlayerPrefs.GetInstance().GetLevel())
-                Statistic.GetInstance().CollectStats((int)levelScr.GetLevel(),_stepsCount,levelScr.GetNumberOfObstacles());
+                Statistic.GetInstance().CollectStats((int)levelScr.GetLevel(),_currentSteps,levelScr.GetNumberOfObstacles());
             levelScr.SetNextLevel();
             EndEpisode();
             _isAgentReachGoal = false;
@@ -119,9 +119,9 @@ public class MyAgent : Agent
         }
 
         AddReward(-0.001f);
-        _stepsCount++;
-        // if(_stepsCount%100 == 0)
-        //     Debug.Log("Steps count: " + _stepsCount);
+        _currentSteps++;
+        // if(_currentSteps%100 == 0)
+        //     Debug.Log("Steps count: " + _currentSteps);
     }
 
     private void MoveAgent(int moveAct, int rotateAct, int jumpAction)
@@ -282,5 +282,6 @@ public class MyAgent : Agent
     public void IncreaseMaxSteps(int steps)
     {
         MaxStep += steps;
+        AddReward(1);
     }
 }
