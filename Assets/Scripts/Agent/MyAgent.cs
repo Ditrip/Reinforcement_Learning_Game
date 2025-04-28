@@ -25,7 +25,6 @@ public class MyAgent : Agent
     private bool _isAgentFailed;
     private int _currentPlatformID;
     private int _lastPlatformID;
-    private const int MaxStepsOnStart = 500;
     private uint _stepsCount;
     
 
@@ -277,10 +276,5 @@ public class MyAgent : Agent
         _currentPlatformID = id;
 
         // Debug.Log("Current platform ID: " + _currentPlatformID + " Last platform ID: " + _lastPlatformID);
-    }
-
-    public void IncreaseMaxSteps(int steps)
-    {
-        MaxStep += steps;
     }
 }

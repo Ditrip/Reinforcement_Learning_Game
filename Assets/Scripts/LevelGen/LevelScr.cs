@@ -5,12 +5,13 @@ using Random = UnityEngine.Random;
 
 public class LevelScr : MonoBehaviour
 {
-    
     public GameObject platformPrefab;
     public GameObject fallingObjPrefab;
     public GameObject fadePlatformPrefab;
     public GameObject jumpWallPrefab;
     public GameObject pillarsPrefab;
+    public GameObject overLeapPrefab;
+    public GameObject smallPlatformPrefab;
     public GameObject target;
     public GameObject agent;
     public GameObject rootPlatform;
@@ -108,6 +109,11 @@ public class LevelScr : MonoBehaviour
                     jumpWall.SetJumpWall(dir);
                     childPlatformWalls.SetWallHeight(dir,Const.WallHeight.Normal);
                 }
+                else if (childPlatformWalls.TryGetComponent<OverLeapWall>(out OverLeapWall overLeapWall))
+                {
+                    overLeapWall.SetOverLeapPlatform(dir);
+                    childPlatformWalls.SetWallHeight(dir,Const.WallHeight.High);
+                }
                 else
                     childPlatformWalls.WallHandle(dir, false);
             }
@@ -129,6 +135,7 @@ public class LevelScr : MonoBehaviour
             platform.transform.position = platformPos;
             if(!walls)
                 CheckMergePlatform(platformPos);
+            
             parentPlatform = platform;
             prevDir = newDir;
         }
@@ -189,7 +196,7 @@ public class LevelScr : MonoBehaviour
         sphereBody.velocity = Vector3.zero;
         sphereBody.angularVelocity = Vector3.zero;
     }
-
+    
     public void SetNextLevel()
     {
         if (_lvlCounter >= MyPlayerPrefs.GetInstance().level && _lvlCounter >= numOfRepeatedLvl)
@@ -235,6 +242,12 @@ public class LevelScr : MonoBehaviour
                 case Const.Platforms.Pillars:
                     platformObj = Instantiate(pillarsPrefab, gameObject.transform);
                     _checkPillarPlatformSpawn = true;
+                    break;
+                case Const.Platforms.OverLeap:
+                    platformObj = Instantiate(overLeapPrefab, gameObject.transform);
+                    break;
+                case Const.Platforms.SmallPlatform:
+                    platformObj = Instantiate(smallPlatformPrefab, gameObject.transform);
                     break;
                 default:
                     Debug.Log("Level Scr (Unique platform set to 'default')");

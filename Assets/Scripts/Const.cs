@@ -27,6 +27,8 @@ public class Const
         RootPlatform,
         NextPlatform,
         JumpWall,
+        OverLeap,
+        SmallPlatform,
         TrainAiEnv,
         Obstacle,
         PrevPlatform,
@@ -38,9 +40,11 @@ public class Const
     {
         Default = 0,
         JumpWall = 1,
-        Pillars = 2
-        // FallingObj = 3,
-        // FadePlatform = 4
+        Pillars = 2,
+        OverLeap = 3,
+        SmallPlatform = 4,
+        // FallingObj = 5,
+        // FadePlatform = 6
     }
 
     public enum WallHeight
