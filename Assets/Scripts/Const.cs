@@ -33,7 +33,9 @@ public class Const
         Obstacle,
         PrevPlatform,
         LeftJumpWall,
-        RightJumpWall
+        RightJumpWall,
+        OverLeapBlock,
+        OverLeapWall
     }
 
     public enum Platforms

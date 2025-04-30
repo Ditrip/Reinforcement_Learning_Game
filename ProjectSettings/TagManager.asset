@@ -17,6 +17,8 @@ TagManager:
   - PrevPlatform
   - LeftJumpWall
   - RightJumpWall
+  - OverLeapBlock
+  - OverLeapWall
   layers:
   - Default
   - TransparentFX

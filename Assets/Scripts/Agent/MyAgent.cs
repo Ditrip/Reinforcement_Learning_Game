@@ -232,7 +232,8 @@ public class MyAgent : Agent
             if (collisionInfo.gameObject.tag.Equals(Const.Tags.Platform.ToString())
                 || collisionInfo.gameObject.tag.Equals(Const.Tags.RootPlatform.ToString())
                 || collisionInfo.gameObject.tag.Equals(Const.Tags.PrevPlatform.ToString())
-                || collisionInfo.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString()))
+                || collisionInfo.gameObject.tag.Equals(Const.Tags.NextPlatform.ToString())
+                || collisionInfo.gameObject.tag.Equals(Const.Tags.OverLeapBlock.ToString()))
             {
                 _isAgentJumping = false;
             }

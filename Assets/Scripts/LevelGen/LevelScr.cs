@@ -109,11 +109,6 @@ public class LevelScr : MonoBehaviour
                     jumpWall.SetJumpWall(dir);
                     childPlatformWalls.SetWallHeight(dir,Const.WallHeight.Normal);
                 }
-                else if (childPlatformWalls.TryGetComponent<OverLeapWall>(out OverLeapWall overLeapWall))
-                {
-                    overLeapWall.SetOverLeapPlatform(dir);
-                    childPlatformWalls.SetWallHeight(dir,Const.WallHeight.High);
-                }
                 else
                     childPlatformWalls.WallHandle(dir, false);
             }
@@ -132,6 +127,13 @@ public class LevelScr : MonoBehaviour
             }
             IsJumpPlatform(Const.GetOppositeDirection(newDir));
 
+            if (parentPlatform.TryGetComponent<OverLeapWall>(out OverLeapWall overLeapWall))
+            {
+                overLeapWall.SetOverLeapPlatform(newDir);
+                parentPlatformWalls.WallHandle(newDir, true);
+                parentPlatformWalls.SetWallHeight(newDir,Const.WallHeight.High);
+                parentPlatformWalls.GetWallFromDir(newDir).gameObject.tag = nameof(Const.Tags.OverLeapWall);
+            }
             platform.transform.position = platformPos;
             if(!walls)
                 CheckMergePlatform(platformPos);
@@ -278,7 +280,7 @@ public class LevelScr : MonoBehaviour
     {
         for (int i = 0; i < lastID; i++)
         {
-            _platformList[i].tag = Const.Tags.PrevPlatform.ToString();
+            _platformList[i].tag = nameof(Const.Tags.PrevPlatform);
         }
     }
 

@@ -360,6 +360,8 @@ MonoBehaviour:
   - Wall
   - LeftJumpWall
   - RightJumpWall
+  - OverLeapBlock
+  - OverLeapWall
   m_RaysPerDirection: 6
   m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.2
@@ -841,6 +843,8 @@ MonoBehaviour:
   fadePlatformPrefab: {fileID: 4390864954431106648, guid: 06ccbeedca861ed42bf074c6133d06fa, type: 3}
   jumpWallPrefab: {fileID: 4390864954431106648, guid: 824834514a1311d4a88c054555b7159b, type: 3}
   pillarsPrefab: {fileID: 4390864954431106648, guid: e430fd9793ba54e439d909304bbb7121, type: 3}
+  overLeapPrefab: {fileID: 4390864954431106648, guid: 9fc251dec4f392ef095a24b866050e87, type: 3}
+  smallPlatformPrefab: {fileID: 4390864954431106648, guid: 9f4742ab0b0006ae08156c241ead3b83, type: 3}
   target: {fileID: 695694715865812590}
   agent: {fileID: 772718164203965589}
   rootPlatform: {fileID: 8224913837741513709}

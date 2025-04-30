@@ -26,20 +26,24 @@ public class OverLeapWall : MonoBehaviour
         _jumpBlock = Instantiate(jumpBlockPrefab, gameObject.transform);
         Vector3 pos = parentWallPos;
         Vector3 scale = _jumpBlock.transform.localScale;
-        pos.y = (float)Const.WallHeight.High/4;
+        
 
         switch (wallDir)
         {
             case Const.Direction.Up:
-                pos.z -= Const.PlatformSize / 10;
+                pos.z -= Const.PlatformSize / 5;
+                scale.z = 3;
                 scale.x = Const.PlatformSize / 2;
+                
                 break;
             case Const.Direction.Left:
-                pos.x += Const.PlatformSize / 10;
+                pos.x += Const.PlatformSize / 5;
+                scale.x = 3;
                 scale.z = Const.PlatformSize / 2;
                 break;
             case Const.Direction.Right:
-                pos.x -= Const.PlatformSize / 10;
+                pos.x -= Const.PlatformSize / 5;
+                scale.x = 3;
                 scale.z = Const.PlatformSize / 2;
                 break;
         }
