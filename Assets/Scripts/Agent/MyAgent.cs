@@ -157,12 +157,26 @@ public class MyAgent : Agent
                 if(!_isAgentJumping){
                     _rigidBody.AddForce(0,jumpVelocity,0,ForceMode.VelocityChange);
                     _isAgentJumping = true;
+                    // StartCoroutine(JumpOverTime());
                     StartCoroutine(JumpingCoroutine());
                 }
                 break;
         }
         
         transform.Rotate(rotateDir, Time.fixedDeltaTime * 200f);
+    }
+    
+    private IEnumerator JumpOverTime()
+    {
+        float timer = 0f;
+        float jumpDuration = 0.5f;
+        while (timer < jumpDuration)
+        {
+            _rigidBody.AddForce(Vector3.up * (20f * Time.fixedDeltaTime), ForceMode.VelocityChange);
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)

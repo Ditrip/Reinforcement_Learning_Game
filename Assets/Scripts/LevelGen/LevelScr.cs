@@ -17,10 +17,8 @@ public class LevelScr : MonoBehaviour
     public GameObject rootPlatform;
     public int numOfRepeatedLvl = 5;
     public bool walls = false;
-    public int spawnChanceUniquePlat = 30;
     private List<GameObject> _platformList;
-    private bool _checkPillarPlatformSpawn; // Is used to prevent spawn jump wall platform after platform with pillars
-    // because the pillar can block the path for agent
+    
     
     private static int _lvlCounter = 0;
     private uint _level;
@@ -48,7 +46,6 @@ public class LevelScr : MonoBehaviour
     public void SetLevel()
     {
         _platformList ??= new List<GameObject>(); // ??= (Is Platform list null?)
-        _checkPillarPlatformSpawn = false;
         _level = MyPlayerPrefs.GetInstance().GetLevel();
         Const.Direction prevDir = Const.Direction.Up;
         GameObject parentPlatform = rootPlatform;
@@ -65,7 +62,11 @@ public class LevelScr : MonoBehaviour
             GameObject platform;
             if (trainLevelScr is null)
             {
-                platform = GetRandomPlatform();
+                if (i % 2 == 0 && i != _level-1)
+                    platform = GetRandomPlatform();    
+                else
+                    platform = Instantiate(platformPrefab, gameObject.transform);
+                
             }
             else
             {
@@ -222,46 +223,36 @@ public class LevelScr : MonoBehaviour
         int chanceSpawn = Random.Range(0, 101);
         GameObject platformObj = null;
         // Debug.Log("Level scr(Random Value: " + chanceSpawn + ")");
+        
+        Array platforms = Enum.GetValues(typeof(Const.Platforms));
+        // Range set from 1 because 0 equals to default platform
+        Const.Platforms platform = (Const.Platforms)platforms.GetValue(Random.Range(1, platforms.Length));
+        // Debug.Log("Unique platform has spawned (Platform: " + platform.ToString() + ")");
 
-        if (chanceSpawn <= spawnChanceUniquePlat)
+
+        switch (platform)
         {
-            Array platforms = Enum.GetValues(typeof(Const.Platforms));
-            // Range set from 1 because 0 equals to default platform
-            Const.Platforms platform = (Const.Platforms)platforms.GetValue(Random.Range(1, platforms.Length));
-            // Debug.Log("Unique platform has spawned (Platform: " + platform.ToString() + ")");
-            if (_checkPillarPlatformSpawn && platform == Const.Platforms.JumpWall)
-            {
-                platform = Const.Platforms.Default;
-                _checkPillarPlatformSpawn = false;
-            }
-
-
-            switch (platform)
-            {
-                case Const.Platforms.JumpWall:
-                    platformObj = Instantiate(jumpWallPrefab, gameObject.transform);
-                    break;
-                case Const.Platforms.Pillars:
-                    platformObj = Instantiate(pillarsPrefab, gameObject.transform);
-                    _checkPillarPlatformSpawn = true;
-                    break;
-                case Const.Platforms.OverLeap:
-                    platformObj = Instantiate(overLeapPrefab, gameObject.transform);
-                    break;
-                case Const.Platforms.SmallPlatform:
-                    platformObj = Instantiate(smallPlatformPrefab, gameObject.transform);
-                    break;
-                default:
-                    Debug.Log("Level Scr (Unique platform set to 'default')");
-                    platformObj = Instantiate(platformPrefab, gameObject.transform);
-                    break;
-            }
-            
+            case Const.Platforms.JumpWall:
+                platformObj = Instantiate(jumpWallPrefab, gameObject.transform);
+                break;
+            case Const.Platforms.Pillars:
+                platformObj = Instantiate(pillarsPrefab, gameObject.transform);
+                break;
+            case Const.Platforms.OverLeap:
+                platformObj = Instantiate(overLeapPrefab, gameObject.transform);
+                break;
+            case Const.Platforms.SmallPlatform:
+                platformObj = Instantiate(smallPlatformPrefab, gameObject.transform);
+                break;
+            default:
+                Debug.Log("Level Scr (Unique platform set to 'default')");
+                platformObj = Instantiate(platformPrefab, gameObject.transform);
+                break;
         }
+        
 
         if (platformObj is null)
         {
-            _checkPillarPlatformSpawn = false;
             platformObj = Instantiate(platformPrefab, gameObject.transform);
         }
         
